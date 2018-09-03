@@ -1,7 +1,7 @@
 import World from './World'
 import ReactDOM from 'react-dom'
 import React from 'react'
-import Header from '../components/presentational/Header'
+import Panel from '../components/presentational/Panel'
 
 if (typeof window === 'undefined') {
   var isNode = true
@@ -21,4 +21,4 @@ export { document }
 
 const world = new World()
 
-ReactDOM.render(<Header />, document.getElementById('nations'))
+ReactDOM.render(<Panel header="Nations" />, document.getElementById('nations'))

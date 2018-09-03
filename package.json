@@ -1,9 +1,20 @@
 {
+  "scripts": {
+    "build:scss": "node-sass src/scss/theme.scss > theme.css",
+    "build:webpack": "webpack",
+    "watch": "concurrently --names \"SCSS,WEBPACK\" -c \"green,blue\" \"yarn watch:scss\" \"yarn watch:webpack\"",
+    "watch:scss": "chokidar 'src/scss/**/*.scss' -c 'yarn build:scss'",
+    "watch:webpack": "chokidar 'src/**/*.js' -c 'yarn build:webpack'"
+  },
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.2",
+    "chokidar": "^2.0.4",
+    "chokidar-cli": "^1.2.1",
+    "concurrently": "^4.0.1",
+    "node-sass": "4.9.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "webpack": "^4.17.1",
