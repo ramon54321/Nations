@@ -1,3 +1,30 @@
-.Panel {
-  background-color: steelblue;
-  margin-top: 5px; }
+.nations ul {
+  padding: 0; }
+
+.nations li {
+  list-style: none; }
+
+.nations .panel {
+  color: #303030;
+  width: 400px; }
+  .nations .panel li {
+    height: 50px;
+    line-height: 46px;
+    color: #fcfcfc;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    background-color: #3c88bb;
+    padding-left: 2em;
+    transition-duration: 0.5s; }
+    .nations .panel li:hover {
+      background-color: #44a7e9;
+      padding-left: 4em; }
+
+.nations canvas {
+  display: inline-block;
+  vertical-align: top;
+  border: 2px solid #303030; }
+
+.nations #nations {
+  display: inline-block;
+  vertical-align: top; }

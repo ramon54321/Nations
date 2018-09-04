@@ -1,20 +1,21 @@
 module.exports = {
-  entry: "./src/core/main.js",
+  entry: './src/core/main.js',
   output: {
-    filename: "./bundle.js"
+    filename: './bundle.js',
   },
   optimization: {
-    minimize: false
+    minimize: false,
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
-        }
-      }
-    ]
-  }
+          loader: 'babel-loader',
+        },
+      },
+    ],
+  },
 }

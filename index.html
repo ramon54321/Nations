@@ -6,9 +6,17 @@
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" type="text/css" href="theme.css">
 </head>
-<body>
-  <canvas id="canvas"></canvas>
-  <div class="markdown-body" id="nations"></div>
+<body class="markdown-body">
+  <div class="nations">
+    <div id="nations"></div>
+    <canvas id="canvas"></canvas>
+  </div>
   <script src="./dist/bundle.js"></script>
+  <div style="display:none;">
+      <img id="source-mountain" src="./images/mountain.svg" width="25" height="25">
+      <img id="source-ocean" src="./images/ocean.svg" width="25" height="25">
+      <img id="source-field" src="./images/field.svg" width="25" height="25">
+      <img id="source-forest" src="./images/forest.svg" width="25" height="25">
+  </div>
 </body>
 </html>

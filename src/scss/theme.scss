@@ -1,4 +1,5 @@
-.Panel {
-  background-color: steelblue;
-  margin-top: 5px;
+.nations {
+  @import './variables';
+  @import './base';
+  @import './main';
 }
