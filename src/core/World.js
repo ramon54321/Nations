@@ -4,14 +4,15 @@ import { document } from './main'
 import { observable, decorate } from 'mobx';
 
 class World {
-  constructor() {
+  constructor(size) {
     if (document.world) {
       console.error("World already exists...")
       return
     }
     document.world = this
+    this.size = size
 
-    this.map = new Map(this, 80)
+    this.map = new Map(this, size)
     document.map = this.map
 
     this.nations = []
@@ -19,9 +20,9 @@ class World {
 
     // -- AJAX load nations
     const themis = new Nation(this, "Themis")
-    themis.ownTile(this.map.getTile(10,10))
-    themis.ownTile(this.map.getTile(11,10))
-    themis.ownTile(this.map.getTile(11,11))
+    themis.ownTile(this.map.getTile(3,3))
+    themis.ownTile(this.map.getTile(3,4))
+    themis.ownTile(this.map.getTile(4,4))
     this.nations.push(themis)
 
     this.pop = 23

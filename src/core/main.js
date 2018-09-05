@@ -11,8 +11,9 @@ if (typeof window === 'undefined') {
 }
 
 var resources
+var keys
 
-window.onload = function () { 
+window.onload = function() {
   if (isNode) {
     var document = {}
     resources = {}
@@ -29,14 +30,24 @@ window.onload = function () {
     }
     console.log('Running in Browser')
   }
-  
-  const world = new World()
-  
+
+  keys = {}
+  document.keys = keys
+  window.onkeyup = function(e) {
+    // console.log("Up: " + e.keyCode)
+    keys[e.keyCode] = false
+  }
+  window.onkeydown = function(e) {
+    keys[e.keyCode] = true
+  }
+
+  const world = new World(20)
+
   const renderer = new Renderer(world)
-  
+
   renderer.render()
-  
+
   ReactDOM.render(<Panel header="Nations" world={world} />, document.getElementById('nations'))
 }
 
-export { document, resources }
+export { document, resources, keys }

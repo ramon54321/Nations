@@ -2218,6 +2218,10 @@ hosted-git-info@^2.1.4:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.7.1.tgz#97f236977bd6e125408930ff6de3eec6281ec047"
 
+hotkeys-js@^3.3.7:
+  version "3.3.7"
+  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.3.7.tgz#dc927b564c7334399da87c0dc6fc076484ae6fa5"
+
 http-signature@~1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/http-signature/-/http-signature-1.1.1.tgz#df72e267066cd0ac67fb76adf8e134a8fbcf91bf"

@@ -1,7 +1,9 @@
 {
   "scripts": {
+    "build--production": "yarn build:scss && yarn build:webpack--production",
     "build:scss": "node-sass src/scss/theme.scss > theme.css",
     "build:webpack": "webpack",
+    "build:webpack--production": "webpack --config webpack.config.production.js",
     "watch": "concurrently --names \"SCSS,WEBPACK\" -c \"green,blue\" \"yarn watch:scss\" \"yarn watch:webpack\"",
     "watch:scss": "chokidar 'src/scss/**/*.scss' -c 'yarn build:scss'",
     "watch:webpack": "chokidar 'src/**/*.js' -c 'yarn build:webpack'"
@@ -15,6 +17,7 @@
     "chokidar": "^2.0.4",
     "chokidar-cli": "^1.2.1",
     "concurrently": "^4.0.1",
+    "hotkeys-js": "^3.3.7",
     "mobx": "^5.1.0",
     "mobx-react": "^5.2.5",
     "node-sass": "4.9.0",

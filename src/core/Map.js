@@ -16,7 +16,14 @@ class Map {
     }
   }
   getTile(x, y) {
-    return this.tiles[y][x]
+    if(this.tiles != undefined && this.tiles[y] != undefined && this.tiles[y][x] != undefined) {
+      return this.tiles[y][x]
+    }
+  }
+  getTileFromPixel(x, y, tileSize) {
+    x = Math.floor(x / tileSize)
+    y = Math.floor(y / tileSize)
+    return this.getTile(x, y)
   }
   iterate(callback) {
     for (let y = 0; y < this.size; y++) {

@@ -50,7 +50,7 @@ export function seed(seed) {
   }
 }
 
-seed(Math.floor(Math.random() * 200))
+seed(105/*Math.floor(Math.random() * 200)*/)
 
 function fade(t) {
   return t * t * t * (t * (t * 6 - 15) + 10)
