@@ -1,5 +1,7 @@
+const webpack = require('webpack')
+
 module.exports = {
-  entry: './src/core/main.js',
+  entry: './src/main.js',
   output: {
     filename: './bundle.js',
   },
@@ -9,7 +11,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',

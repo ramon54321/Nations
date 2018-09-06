@@ -1,0 +1,21 @@
+{
+  "scripts": {
+    "start": "node ./dist/bundle.js",
+    "build": "yarn build:webpack",
+    "build--production": "yarn build:webpack--production",
+    "build:webpack": "webpack",
+    "build:webpack--production": "webpack --config webpack.config.production.js",
+    "watch": "concurrently --names \"WEBPACK\" -c \"blue\" \"yarn watch:webpack\"",
+    "watch:webpack": "chokidar 'src/**/*.js' -c 'yarn build:webpack'"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-loader": "^8.0.2",
+    "chokidar": "^2.0.4",
+    "chokidar-cli": "^1.2.1",
+    "concurrently": "^4.0.1",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0"
+  }
+}

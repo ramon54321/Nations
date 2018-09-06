@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "build": "yarn build:scss && yarn build:webpack",
     "build--production": "yarn build:scss && yarn build:webpack--production",
     "build:scss": "node-sass src/scss/theme.scss > theme.css",
     "build:webpack": "webpack",

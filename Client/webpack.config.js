@@ -1,3 +1,5 @@
+const webpack = require('webpack')
+
 module.exports = {
   entry: './src/core/main.js',
   output: {
@@ -18,4 +20,9 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new webpack.NormalModuleReplacementPlugin(/(.*)-TARGET_ENV(\.*)/, function(resource) {
+      resource.request = resource.request.replace(/-TARGET_ENV/, `-development`)
+    }),
+  ],
 }

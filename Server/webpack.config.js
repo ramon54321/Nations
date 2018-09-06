@@ -1,15 +1,18 @@
+const webpack = require('webpack')
+
 module.exports = {
-  entry: './src/core/main.js',
+  entry: './src/main.js',
   output: {
     filename: './bundle.js',
   },
   optimization: {
-    minimize: true,
+    minimize: false,
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -19,7 +22,7 @@ module.exports = {
   },
   plugins: [
     new webpack.NormalModuleReplacementPlugin(/(.*)-TARGET_ENV(\.*)/, function(resource) {
-      resource.request = resource.request.replace(/-TARGET_ENV/, `-production`)
+      resource.request = resource.request.replace(/-TARGET_ENV/, `-development`)
     }),
   ],
 }

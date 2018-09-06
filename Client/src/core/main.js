@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import React from 'react'
 import Panel from '../components/presentational/Panel'
 import Renderer from './Renderer'
+import config from './config-TARGET_ENV'
 
 if (typeof window === 'undefined') {
   var isNode = true
@@ -30,6 +31,9 @@ window.onload = function() {
     }
     console.log('Running in Browser')
   }
+
+  console.log(`Built with ${config.environment} config`)
+  document.config = config
 
   keys = {}
   document.keys = keys
