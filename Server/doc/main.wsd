@@ -1,0 +1,23 @@
+@startuml
+
+class Map {
+  -size: Integer
+  -seed: Integer
+  -tiles: Tile[]
+
+  +getTileData()
+}
+Map "1" -- "Many" Tile
+
+class Tile {
+  +getData()
+}
+
+class Situation {
+  +addNation()
+  +removeNation()
+  +getNationData()
+  +getDevelopmentData()
+}
+
+@enduml
