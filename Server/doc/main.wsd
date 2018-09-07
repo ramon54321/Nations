@@ -14,10 +14,31 @@ class Tile {
 }
 
 class Situation {
+  -nations: Nation{}
+
   +addNation()
   +removeNation()
   +getNationData()
+}
+Situation "1" -- "Many" Nation
+
+class Nation {
+  -name: String
+  +getData()
+}
+
+class Store {
+  -developments: Development{}
+
+  +addDevelopment()
+  +removeDevelopment()
   +getDevelopmentData()
+}
+Store "1" -- "Many" Development
+
+class Development {
+  -data: {}
+  +getData()
 }
 
 @enduml

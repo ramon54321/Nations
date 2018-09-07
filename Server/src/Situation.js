@@ -28,10 +28,6 @@ class Situation {
     }
     return nationData
   }
-
-  getDevelopmentData() {
-    
-  }
 }
 
 export default Situation
