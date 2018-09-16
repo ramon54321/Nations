@@ -5,6 +5,18 @@ import Panel from '../components/presentational/Panel'
 import Renderer from './Renderer'
 import config from './config-TARGET_ENV'
 
+var socket = require('socket.io-client')('http://localhost:9002')
+socket.on('connect', function() {
+  console.log('Connected to Server')
+  socket.emit('management', 'ack')
+})
+socket.on('management', function(data) {
+  console.log(data)
+})
+socket.on('disconnect', function() {
+  console.log('Disconnected from Server')
+})
+
 if (typeof window === 'undefined') {
   var isNode = true
 } else {

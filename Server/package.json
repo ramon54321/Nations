@@ -1,21 +1,20 @@
 {
   "scripts": {
-    "start": "node ./dist/bundle.js",
-    "build": "yarn build:webpack",
-    "build--production": "yarn build:webpack--production",
-    "build:webpack": "webpack",
-    "build:webpack--production": "webpack --config webpack.config.production.js",
-    "watch": "concurrently --names \"WEBPACK\" -c \"blue\" \"yarn watch:webpack\"",
-    "watch:webpack": "chokidar 'src/**/*.js' -c 'yarn build:webpack'"
+    "start": "yarn run build && RUN_ENV=development node ./lib/main.js",
+    "start--production": "RUN_ENV=production node ./lib/main.js",
+    "build": "rm lib || true && babel src -d lib",
+    "build--production": "yarn run build"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "babel-loader": "^8.0.2",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
     "chokidar": "^2.0.4",
     "chokidar-cli": "^1.2.1",
-    "concurrently": "^4.0.1",
-    "webpack": "^4.17.1",
-    "webpack-cli": "^3.1.0"
+    "concurrently": "^4.0.1"
+  },
+  "dependencies": {
+    "deep-diff": "^1.0.2",
+    "socket.io": "^2.1.1"
   }
 }

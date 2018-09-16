@@ -14,6 +14,10 @@ class Map {
     }
   }
 
+  getTiles() {
+    return this.tiles
+  }
+
   getTileData() {
     const tileData = []
     for (let i = 0; i < this.tiles.length; i++) {
