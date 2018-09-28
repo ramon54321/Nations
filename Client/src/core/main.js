@@ -5,17 +5,28 @@ import Panel from '../components/presentational/Panel'
 import Renderer from './Renderer'
 import config from './config-TARGET_ENV'
 
-var socket = require('socket.io-client')('http://localhost:9002')
-socket.on('connect', function() {
-  console.log('Connected to Server')
-  socket.emit('management', 'ack')
-})
-socket.on('management', function(data) {
-  console.log(data)
-})
-socket.on('disconnect', function() {
-  console.log('Disconnected from Server')
-})
+// var socket = require('socket.io-client')('http://localhost:9002')
+// socket.on('connect', function() {
+//   console.log('Connected to Server')
+//   socket.emit('management', 'ack')
+// })
+// socket.on('management', function(data) {
+//   console.log(data)
+// })
+// socket.on('disconnect', function() {
+//   console.log('Disconnected from Server')
+// })
+
+const url = 'ws://localhost:8080'
+const connection = new WebSocket(url)
+
+connection.onopen = () => {
+  connection.send('hey')
+}
+
+connection.onmessage = e => {
+  console.log(e.data)
+}
 
 if (typeof window === 'undefined') {
   var isNode = true
@@ -43,6 +54,8 @@ window.onload = function() {
     }
     console.log('Running in Browser')
   }
+
+  document.send = (data) => connection.send(data)
 
   console.log(`Built with ${config.environment} config`)
   document.config = config

@@ -1,90 +1,90 @@
-/*
-import config from './config/config-TARGET_ENV'
+import config from './config/config-development'
+// TODO: Replace TARGET_ENV on build
+import WebSocket from 'ws'
 import './utils'
-import Map from './Map'
+import WebSocketClient from './WebSocketClient'
+import World from './World'
 import Situation from './Situation'
 import Store from './Store'
-
 import CommandQueue from './CommandQueue'
 
 console.log(`Built with ${config.environment} config`)
 
-*/
+// import * as Diff from 'jsondiffpatch'
 
-const server = require('http').createServer()
-const io = require('socket.io')(server)
-const port = 9002
+// const stateA = {
+//   gold: 11
+// }
 
-io.on('connect', socket => {
-  console.log('connect ' + socket.id)
+// const stateB = {
+//   gold: 22,
+//   wood: 7
+// }
 
-  socket.on('event', data => {
-    console.log(data)
-    socket.emit('event', 'Thanks!')
-  })
-  socket.on('disconnect', () => console.log('disconnect ' + socket.id))
-})
-server.listen(port, () => console.log('server listening on port ' + port))
+// const patchAB = Diff.diff(stateA, stateB)
 
+// console.log("State A")
+// console.log(JSON.stringify(stateA, null, 4))
 
-var diff = require('deep-diff').diff
-var applyChange = require('deep-diff').applyChange
+// console.log("State B")
+// console.log(JSON.stringify(stateB, null, 4))
 
-const lhs = {
-  words: [
-    "hello",
-    "world"
-  ]
-}
+// console.log("Patch")
+// console.log(JSON.stringify(patchAB, null, 4))
 
-const rhs = {
-  words: [
-    "hello",
-    "world",
-    "!"
-  ]
-}
+// Diff.patch(stateA, patchAB)
 
-const differences = diff(lhs, rhs).reverse()
-
-differences.forEach(difference => {
-  applyChange(lhs, true, difference)
-})
-
-console.log(lhs)
+// console.log("State A")
+// console.log(JSON.stringify(stateA, null, 4))
 
 
+/**
+ * Server state and websocket server
+ */
+export const serverState = {}
+
+const webSocketClients = new Map()
+serverState.webSocketClients = webSocketClients
+
+const webSocketServer = new WebSocket.Server({ port: 8080 })
+webSocketServer.on('connection', socket => new WebSocketClient(socket))
 
 
-
-
-/*
-
-
-const clientCommandQueue = new CommandQueue()
-const serverCommandQueue = new CommandQueue()
-
+/**
+ * Initialization of server state
+ */
 const seed = 105
-const size = 2
+const size = 1
 const name = 'Zelda'
 
-const map = new Map(size, seed)
+const world = new World(size, seed)
+serverState.world = world
+
 const situation = new Situation()
+serverState.situation = situation
+
 const store = new Store()
-
-
+serverState.store = store
 
 situation.addNation("Valcom")
 situation.addNation("Narnia")
 
-store.addDevelopment({name: "Mill", consumption: {goods: 2}})
+store.addDevelopment({name: "Mill", consumption: {wood: 2}})
 
-map.getTiles()[2].developments.push(store.developments["mill"])
+world.getTiles()[0].developments.push(store.developments["mill"])
+world.getTiles()[0].increaseResource('wood', 40)
 
+// TODO: Brute force send state each frame to client
+// TODO: Client should render state
+// TODO: Think about how to break apart logic (tiles are king!)
 
-// setInterval(() => tick(1000), 1000)
+/**
+ * Command queue initialization
+ */
+const clientCommandQueue = new CommandQueue()
+const serverCommandQueue = new CommandQueue()
 
-
+setInterval(() => tick(1000), 1000)
 
 function tick(delta) {
   // Process Client Input
@@ -95,21 +95,19 @@ function tick(delta) {
   clientCommandQueue.clear()
 
   // Process Tiles
-  const tiles = map.getTiles()
+  const tiles = world.getTiles()
   tiles.forEach(tile => tile.tick(delta))
 }
 
-function getStateData() {
+function getGameStateData() {
   return {
     seed: seed,
     size: size,
     name: name,
-    tiles: map.getTileData(),
+    tiles: world.getTileData(),
     nations: situation.getNationData(),
     developments: store.getDevelopmentData(),
   }
 }
 
-// console.log(JSON.stringify(getStateData(), null, 4))
-
-*/
+// console.log(JSON.stringify(getGameStateData(), null, 4))

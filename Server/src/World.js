@@ -1,6 +1,6 @@
 import Tile from './Tile'
 
-class Map {
+class World {
   constructor(size, seed) {
     this.size = size
     this.seed = seed
@@ -30,4 +30,4 @@ class Map {
   }
 }
 
-export default Map
+export default World

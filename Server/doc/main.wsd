@@ -1,13 +1,13 @@
 @startuml
 
-class Map {
+class World {
   -size: Integer
   -seed: Integer
   -tiles: Tile[]
 
   +getTileData()
 }
-Map "1" -- "Many" Tile
+World "1" -- "Many" Tile
 
 class Tile {
   +getData()

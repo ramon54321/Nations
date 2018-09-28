@@ -17,10 +17,10 @@ class Situation {
 
   getNationData() {
     const nationData = {}
-    this.nations.forEachProperty((nation, key) => {
+    this.nations.forEachProperty((nationName, nation) => {
       const data = nation.getData()
       if (data) {
-        nationData[key] = data
+        nationData[nationName] = data
       }
     })
     return nationData
