@@ -48,7 +48,6 @@ function initGameState() {
 
 function initRenderer() {
   document.renderer = new Renderer()
-  document.renderer.render()
 }
 
 function initWebSocketConnection() {

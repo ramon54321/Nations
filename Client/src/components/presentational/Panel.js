@@ -8,7 +8,7 @@ const Panel = observer(props => (
     <Header text={props.header} />
     <ul>
       <li>Population</li>
-      <li onClick={() => null}>Resources</li>
+      <li onClick={() => document.renderer.toggleIcons()}>{document.renderer.isShowIcons ? "Turn Icons Off" : "Turn Icons On"}</li>
       <li>Trade</li>
       <li>Diplomacy</li>
       <li>Research</li>

@@ -1,36 +1,51 @@
 import { document, config } from './main'
 import { iterateScreenTiles, getTileIcon, getTilePositionFromPixel } from './utils'
+import { observable, decorate } from 'mobx'
 
 export default class Renderer {
   constructor() {
     this.initCanvas()
     this.initCanvasMouseListener()
     this.initFPSCounter()
+    this.initCamera()
+    this.initOptions()
 
     this.tileSize = 96
     this.screenSpace = {}
-    this.xOffset = 0
-    this.yOffset = 0
+    this.renderLastTime = Date.now()
+
+    this.render()
+  }
+
+  onInitialGameState() {
+    console.log('Initial gameState received!')
+
+    // console.log(document.gameState)
+
+    // Set middle of map
+    this.xOffset = (this.tileSize * document.gameState.size) / 2 - this.width / 2
+    this.yOffset = (this.tileSize * document.gameState.size) / 2 - this.height / 2
   }
 
   initCanvas() {
     // Get canvas and set dimensions
     this.canvas = document.getElementById('canvas')
-  
+
+    // 896
     this.width = 896
     this.height = 896
     this.canvas.style.width = this.width + 'px'
     this.canvas.style.height = this.height + 'px'
-  
+
     const dpr = window.devicePixelRatio || 1
     const rect = canvas.getBoundingClientRect()
     this.pixelWidth = rect.width * dpr
     this.pixelHeight = rect.height * dpr
-  
+
     this.canvas.width = this.pixelWidth
     this.canvas.height = this.pixelHeight
     document.canvas = this.canvas
-  
+
     // Get context and scale
     this.ctx = document.canvas.getContext('2d')
     this.ctx.scale(dpr, dpr)
@@ -60,27 +75,54 @@ export default class Renderer {
     }, 1000)
   }
 
-  onInitialGameState() {
-    console.log("Initial gameState received!")
-
-    // console.log(document.gameState)
-
-    // Set middle of map
-    this.xOffset = (this.tileSize * document.gameState.size) / 2 - this.width / 2
-    this.yOffset = (this.tileSize * document.gameState.size) / 2 - this.height / 2
+  initCamera() {
+    this.cameraSpeed = 30
+    this.cameraMaxVelocity = 45
+    this.xOffset = 0
+    this.yOffset = 0
+    this.xVelocity = 0
+    this.yVelocity = 0
   }
 
-  updateKeys() {
+  /**
+   * Render State (Can be changed by client)
+   */
+  initOptions() {
+    this.isShowIcons = true
+  }
+
+  toggleIcons() {
+    this.isShowIcons = !this.isShowIcons
+  }
+
+  updateCamera(delta) {
+    // Change Velocity
     if (document.keys[68]) {
-      this.xOffset += 12
+      if (this.xVelocity < this.cameraMaxVelocity) {
+        this.xVelocity += 1 + Math.abs(this.xVelocity) / 10
+      }
     } else if (document.keys[65]) {
-      this.xOffset -= 12
+      if (this.xVelocity > -this.cameraMaxVelocity) {
+        this.xVelocity -= 1 + Math.abs(this.xVelocity) / 10
+      }
     }
     if (document.keys[83]) {
-      this.yOffset += 12
+      if (this.yVelocity < this.cameraMaxVelocity) {
+        this.yVelocity += 1 + Math.abs(this.yVelocity) / 10
+      }
     } else if (document.keys[87]) {
-      this.yOffset -= 12
+      if (this.yVelocity > -this.cameraMaxVelocity) {
+        this.yVelocity -= 1 + Math.abs(this.yVelocity) / 10
+      }
     }
+
+    // Move Camera
+    this.xOffset += this.xVelocity * delta * this.cameraSpeed
+    this.yOffset += this.yVelocity * delta * this.cameraSpeed
+
+    // Slow down
+    this.xVelocity /= 1.1
+    this.yVelocity /= 1.1
   }
 
   updateScreenSpace() {
@@ -164,6 +206,9 @@ export default class Renderer {
   }
 
   drawIcons() {
+    // Last denominator in the following line determines icon fade
+    const speedFade = Math.max(4 - (Math.abs(this.xVelocity) + Math.abs(this.yVelocity)) / 2, 0) / 6
+    this.ctx.globalAlpha = speedFade
     iterateScreenTiles(this.screenSpace, (x, y, tile) => {
       const image = getTileIcon(tile)
       if (image) {
@@ -176,6 +221,7 @@ export default class Renderer {
         )
       }
     })
+    this.ctx.globalAlpha = 1.0
   }
 
   drawHoverOutline() {
@@ -196,27 +242,13 @@ export default class Renderer {
     }
   }
 
-
-
-  // if (document.mouse) {
-    //   const hoverTile = this.world.map.getTileFromPixel(
-    //     this.xOffset + document.mouse.mouseX,
-    //     this.yOffset + document.mouse.mouseY,
-    //     this.tileSize,
-    //   )
-    //   if (hoverTile) {
-    //     ctx.beginPath()
-    //     ctx.rect(
-    //       hoverTile.x * this.tileSize - this.xOffset,
-    //       hoverTile.y * this.tileSize - this.yOffset,
-    //       this.tileSize,
-    //       this.tileSize,
-    //     )
-    //     ctx.stroke()
-    //   }
-    // }
-
   render() {
+    const now = Date.now()
+    const delta = (now - this.renderLastTime) / 1000
+    this.renderLastTime = now
+
+    const isMovingFast = (Math.abs(this.xVelocity) + Math.abs(this.yVelocity)) / 2 > 4
+
     // Increment frames counter
     this.framesThisSecond++
 
@@ -227,7 +259,7 @@ export default class Renderer {
     }
 
     // Client logic updates
-    this.updateKeys()
+    this.updateCamera(delta)
     this.updateScreenSpace()
 
     // Draw calls
@@ -241,21 +273,18 @@ export default class Renderer {
     this.drawMountain()
 
     // Draw Icons
-    this.drawIcons()
-    this.drawHoverOutline()
+    if (this.isShowIcons && !isMovingFast) {
+      this.drawIcons()
+    }
 
-
-    
-
-    // Border
-    // this.world.map.iterate((x, y) => {
-    //   ctx.beginPath()
-    //   ctx.moveTo(x * this.tileSize - this.xOffset, y * this.tileSize - this.yOffset - this.tileSize)
-    //   ctx.lineTo(x * this.tileSize - this.xOffset, y * this.tileSize - this.yOffset)
-    //   ctx.lineTo(x * this.tileSize - this.xOffset + this.tileSize, y * this.tileSize - this.yOffset)
-    //   ctx.stroke()
-    // })
+    // Draw Hover Outline
+    if (!isMovingFast) {
+      this.drawHoverOutline()
+    }
 
     window.requestAnimationFrame(() => this.render())
   }
 }
+decorate(Renderer, {
+  isShowIcons: observable
+})
