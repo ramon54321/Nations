@@ -27,8 +27,6 @@ class Tile {
 
     // TODO: Depending on efficiency, increase resources due to developments
 
-    console.log(JSON.stringify(resourceTargetConsumption, null, 4))
-    console.log(JSON.stringify(resourceActualConsumption, null, 4))
   }
 
   /**
@@ -68,9 +66,7 @@ class Tile {
 
   getData() {
     return {
-      resources: {
-        wood: 33
-      }
+      resources: this.resources
     }
   }
 }

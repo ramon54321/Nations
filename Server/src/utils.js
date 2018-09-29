@@ -14,3 +14,9 @@ export function generateGuid() {
     return v.toString(16)
   })
 }
+
+export function debug(data) {
+  if (data) {
+    console.log(JSON.stringify(data, null, 4))
+  }
+}

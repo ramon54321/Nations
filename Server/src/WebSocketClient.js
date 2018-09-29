@@ -1,17 +1,16 @@
-import { generateGuid } from "./utils";
-import { serverState } from "./main";
+import { generateGuid } from './utils'
 
 class WebSocketClient {
-  constructor(socket) {
-    this.socket = socket
+  constructor(webSocketServer, webSocket) {
+    this.webSocketServer = webSocketServer
+    this.webSocket = webSocket
 
     this.guid = generateGuid()
 
     /**
      * Register webSocketClient with serverState webSocketClients map
      */
-    serverState.webSocketClients.set(this.guid, this)
-
+    this.webSocketServer.webSocketClients.set(this.guid, this)
 
     /**
      * Register client messages to server call mapping
@@ -21,9 +20,13 @@ class WebSocketClient {
 
   initializeMessageDispatcher() {
     const shortGuid = this.getShortGuid()
-    this.socket.on('message', message => {
+    this.webSocket.on('message', message => {
       console.log(`${shortGuid}: ${message}`)
     })
+  }
+
+  send(message) {
+    this.webSocket.send(message)
   }
 
   getShortGuid() {

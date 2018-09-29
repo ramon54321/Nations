@@ -1,8 +1,8 @@
 import config from './config/config-development'
 // TODO: Replace TARGET_ENV on build
-import WebSocket from 'ws'
 import './utils'
-import WebSocketClient from './WebSocketClient'
+import { debug } from './utils'
+import WebSocketServer from './WebSocketServer';
 import World from './World'
 import Situation from './Situation'
 import Store from './Store'
@@ -37,18 +37,13 @@ console.log(`Built with ${config.environment} config`)
 // console.log("State A")
 // console.log(JSON.stringify(stateA, null, 4))
 
-
 /**
  * Server state and websocket server
  */
 export const serverState = {}
 
-const webSocketClients = new Map()
-serverState.webSocketClients = webSocketClients
-
-const webSocketServer = new WebSocket.Server({ port: 8080 })
-webSocketServer.on('connection', socket => new WebSocketClient(socket))
-
+const webSocketServer = new WebSocketServer()
+serverState.webSocketServer = webSocketServer
 
 /**
  * Initialization of server state
@@ -66,15 +61,14 @@ serverState.situation = situation
 const store = new Store()
 serverState.store = store
 
-situation.addNation("Valcom")
-situation.addNation("Narnia")
+situation.addNation('Valcom')
+situation.addNation('Narnia')
 
-store.addDevelopment({name: "Mill", consumption: {wood: 2}})
+store.addDevelopment({ name: 'Mill', consumption: { wood: 2 } })
 
-world.getTiles()[0].developments.push(store.developments["mill"])
+world.getTiles()[0].developments.push(store.developments['mill'])
 world.getTiles()[0].increaseResource('wood', 40)
 
-// TODO: Brute force send state each frame to client
 // TODO: Client should render state
 // TODO: Think about how to break apart logic (tiles are king!)
 
@@ -89,14 +83,16 @@ setInterval(() => tick(1000), 1000)
 function tick(delta) {
   // Process Client Input
   const clientCommands = clientCommandQueue.get()
-  clientCommands.forEach(clientCommand => {
-
-  })
+  clientCommands.forEach(clientCommand => {})
   clientCommandQueue.clear()
 
   // Process Tiles
   const tiles = world.getTiles()
   tiles.forEach(tile => tile.tick(delta))
+
+  // Send GameState to Client
+  const gameState = getGameStateData()
+  webSocketServer.broadcast(gameState)
 }
 
 function getGameStateData() {
