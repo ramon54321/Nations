@@ -1,5 +1,5 @@
 export function getTileIcon() {
-   // getTileIcon(tile) {
+  // getTileIcon(tile) {
   //   let icon = null
   //   if (tile.type < 2.5) {
   //     icon = document.assets.tiles.ocean
@@ -16,13 +16,16 @@ export function getTileIcon() {
 
 export function iterateScreenTiles(options, callback) {
   const size = options.size
-  const yStart = options.yOffset
-  const xStart = options.xOffset
+  const yStart = Math.max(options.yOffset, 0)
+  const xStart = Math.max(options.xOffset, 0)
   const yEnd = Math.min(yStart + options.yTiles, size)
   const xEnd = Math.min(xStart + options.xTiles, size)
   for (let y = yStart; y < yEnd; y++) {
     for (let x = xStart; x < xEnd; x++) {
-      if(document.gameState.tiles != undefined && document.gameState.tiles[y * size + x] != undefined) {
+      if (
+        document.gameState.tiles != undefined &&
+        document.gameState.tiles[y * size + x] != undefined
+      ) {
         callback(x, y, document.gameState.tiles[y * size + x])
       }
     }

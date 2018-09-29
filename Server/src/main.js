@@ -52,7 +52,7 @@ serverState.webSocketServer = webSocketServer
  * Initialization of server state
  */
 const seed = 105
-const size = 1
+const size = 5
 const name = 'Zelda'
 
 const world = new World(size, seed)
