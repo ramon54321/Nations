@@ -1,4 +1,4 @@
-import { generateGuid } from './utils'
+import { generateGuid } from '../utils'
 
 class WebSocketClient {
   constructor(webSocketServer, webSocket) {

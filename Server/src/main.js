@@ -2,11 +2,12 @@ import config from './config/config-development'
 // TODO: Replace TARGET_ENV on build
 import './utils'
 import { debug } from './utils'
-import WebSocketServer from './WebSocketServer';
-import World from './World'
-import Situation from './Situation'
+import WebSocketServer from './networking/WebSocketServer'
+import World from './core/World'
+import Situation from './core/Situation'
 import Store from './Store'
-import CommandQueue from './CommandQueue'
+import CommandQueue from './messaging/CommandQueue'
+import * as MessageBuilder from './messaging/messageBuilder'
 
 console.log(`Built with ${config.environment} config`)
 
@@ -40,7 +41,9 @@ console.log(`Built with ${config.environment} config`)
 /**
  * Server state and websocket server
  */
-export const serverState = {}
+export const serverState = {
+  tickNumber: 0
+}
 
 const webSocketServer = new WebSocketServer()
 serverState.webSocketServer = webSocketServer
@@ -78,9 +81,15 @@ world.getTiles()[0].increaseResource('wood', 40)
 const clientCommandQueue = new CommandQueue()
 const serverCommandQueue = new CommandQueue()
 
+/**
+ * Game tick logic
+ */
 setInterval(() => tick(1000), 1000)
 
 function tick(delta) {
+  // Increment tickNumber
+  serverState.tickNumber++
+
   // Process Client Input
   const clientCommands = clientCommandQueue.get()
   clientCommands.forEach(clientCommand => {})
@@ -91,19 +100,20 @@ function tick(delta) {
   tiles.forEach(tile => tile.tick(delta))
 
   // Send GameState to Client
-  const gameState = getGameStateData()
-  webSocketServer.broadcast(gameState)
+  webSocketServer.broadcast(MessageBuilder.buildGameStateMessage())
 }
 
-function getGameStateData() {
+/**
+ * General functions
+ */
+export function getGameStateData() {
   return {
     seed: seed,
     size: size,
     name: name,
+    tickNumber: serverState.tickNumber, 
     tiles: world.getTileData(),
     nations: situation.getNationData(),
     developments: store.getDevelopmentData(),
   }
 }
-
-// console.log(JSON.stringify(getGameStateData(), null, 4))
