@@ -69,8 +69,8 @@ situation.addNation('Narnia')
 
 store.addDevelopment({ name: 'Mill', consumption: { wood: 2 } })
 
-world.getTiles()[0].developments.push(store.developments['mill'])
-world.getTiles()[0].increaseResource('wood', 40)
+world.getTilesFlat()[0].developments.push(store.developments['mill'])
+world.getTilesFlat()[0].increaseResource('wood', 40)
 
 // TODO: Client should render state
 // TODO: Think about how to break apart logic (tiles are king!)
@@ -96,7 +96,7 @@ function tick(delta) {
   clientCommandQueue.clear()
 
   // Process Tiles
-  const tiles = world.getTiles()
+  const tiles = world.getTilesFlat()
   tiles.forEach(tile => tile.tick(delta))
 
   // Send GameState to Client

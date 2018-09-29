@@ -7,6 +7,16 @@ Object.prototype.forEachProperty = function(callback) {
   }
 }
 
+Object.defineProperty(Array.prototype, 'flat', {
+  value: function(depth = 1) {
+    return this.reduce(function(flat, toFlatten) {
+      return flat.concat(
+        Array.isArray(toFlatten) && depth - 1 ? toFlatten.flat(depth - 1) : toFlatten,
+      )
+    }, [])
+  },
+})
+
 export function generateGuid() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = (Math.random() * 16) | 0,

@@ -1,10 +1,26 @@
+import { perlin } from '../generation/noise'
+
 class Tile {
-  constructor() {
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+
+    this.init()
+    
     this.population = {}
     this.resources = {}
     this.developments = []
   }
 
+  /**
+   * Generate initial values from random generator
+   */
+  init() {
+    const generatedHeight = (perlin((this.x / 80), (this.y / 80), 11.5) + 1) / 2
+    this.height = generatedHeight * 4
+    this.type = Math.floor(this.height)
+  }
+w
   tick(delta) {
     // Resources
     const resourceTargetConsumption = {}
@@ -66,6 +82,7 @@ class Tile {
 
   getData() {
     return {
+      type: this.type,
       resources: this.resources
     }
   }

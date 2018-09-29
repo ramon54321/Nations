@@ -1,3 +1,4 @@
+import WebSocket from 'ws'
 import { generateGuid } from '../utils'
 
 class WebSocketClient {
@@ -16,6 +17,11 @@ class WebSocketClient {
      * Register client messages to server call mapping
      */
     this.initializeMessageDispatcher()
+
+    /**
+     * Call onConnect event after client is initialized
+     */
+    this.onConnect()
   }
 
   initializeMessageDispatcher() {
@@ -25,8 +31,29 @@ class WebSocketClient {
     })
   }
 
+  onConnect() {
+
+  }
+
+  onDisconnect() {
+
+  }
+
+  /**
+   * Should only be called from WebSocketServer
+   * @param {string} message 
+   */
   send(message) {
+    /**
+     * If the client has disconnected -> remove from list and call event
+     */
+    if (this.webSocket.readyState !== WebSocket.OPEN) {
+      this.webSocketServer.webSocketClients.delete(this.guid)
+      this.onDisconnect()
+      return false
+    }
     this.webSocket.send(message)
+    return true
   }
 
   getShortGuid() {
