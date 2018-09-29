@@ -1,0 +1,16 @@
+{
+  "tiles": {
+    "ocean": {
+      "color": "rgb(80, 185, 218)"
+    },
+    "field": {
+      "color": "rgb(185, 212, 111)"
+    },
+    "forest": {
+      "color": "rgb(87, 126, 69)"
+    },
+    "maountain": {
+      "color": "rgb(99, 104, 96)"
+    }
+  }
+}
