@@ -18,9 +18,17 @@ class Tile {
   init() {
     const generatedHeight = (perlin((this.x / 80), (this.y / 80), 11.5) + 1) / 2
     this.height = generatedHeight * 4
-    this.type = Math.floor(this.height)
+    if (this.height < 2.5) {
+      this.type = 0
+    } else if (this.height < 2.9) {
+      this.type = 1
+    } else if (this.height < 3.3) {
+      this.type = 2
+    } else if (this.height < 4) {
+      this.type = 3
+    }
   }
-w
+
   tick(delta) {
     // Resources
     const resourceTargetConsumption = {}

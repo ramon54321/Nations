@@ -1,17 +1,20 @@
-export function getTileIcon() {
-  // getTileIcon(tile) {
-  //   let icon = null
-  //   if (tile.type < 2.5) {
-  //     icon = document.assets.tiles.ocean
-  //   } else if (tile.type < 2.9) {
-  //     icon = document.assets.tiles.field
-  //   } else if (tile.type < 3.3) {
-  //     icon = document.assets.tiles.forest
-  //   } else if (tile.type < 4) {
-  //     icon = document.assets.tiles.mountain
-  //   }
-  //   return icon
-  // }
+export function getTileIcon(tile) {
+  switch(tile.type) {
+    case 0:
+      return document.assets.tiles.ocean
+    case 1:
+      return document.assets.tiles.field
+    case 2:
+      return document.assets.tiles.forest
+    case 3:
+      return document.assets.tiles.mountain
+  }
+}
+
+export function getTilePositionFromPixel(xPixel, yPixel, tileSize) {
+  const x = Math.floor(xPixel / tileSize)
+  const y = Math.floor(yPixel / tileSize)
+  return [x, y]
 }
 
 export function iterateScreenTiles(options, callback) {

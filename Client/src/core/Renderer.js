@@ -1,10 +1,11 @@
 import { document, config } from './main'
-import { iterateScreenTiles } from './utils'
+import { iterateScreenTiles, getTileIcon, getTilePositionFromPixel } from './utils'
 
 export default class Renderer {
   constructor() {
     this.initCanvas()
     this.initCanvasMouseListener()
+    this.initFPSCounter()
 
     this.tileSize = 96
     this.screenSpace = {}
@@ -49,6 +50,14 @@ export default class Renderer {
       document.mouse.mouseX = mousePosition.x
       document.mouse.mouseY = mousePosition.y
     })
+  }
+
+  initFPSCounter() {
+    this.framesThisSecond = 0
+    setInterval(() => {
+      // console.log(`FPS: ${this.framesThisSecond}`)
+      this.framesThisSecond = 0
+    }, 1000)
   }
 
   onInitialGameState() {
@@ -96,98 +105,100 @@ export default class Renderer {
 
   drawOcean() {
     iterateScreenTiles(this.screenSpace, (x, y, tile) => {
-      // TODO: Filter when to draw
-      const centerX = x * this.tileSize - this.xOffset + this.tileSize / 2
-      const centerY = y * this.tileSize - this.yOffset + this.tileSize / 2
-      const radius = (this.tileSize / 2) * 1.45
+      if (tile.type === 0) {
+        const centerX = x * this.tileSize - this.xOffset + this.tileSize / 2
+        const centerY = y * this.tileSize - this.yOffset + this.tileSize / 2
+        const radius = (this.tileSize / 2) * 1.45
 
-      this.ctx.beginPath()
-      this.ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
-      this.ctx.fillStyle = config.drawing.tiles.ocean.color
-      this.ctx.fill()
+        this.ctx.beginPath()
+        this.ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
+        this.ctx.fillStyle = config.drawing.tiles.ocean.color
+        this.ctx.fill()
+      }
     })
   }
 
-  render() {
-    // Check if there is data to draw
-    if (!document.gameState) {
-      window.requestAnimationFrame(() => this.render())
-      return
+  drawField() {
+    iterateScreenTiles(this.screenSpace, (x, y, tile) => {
+      if (tile.type === 1) {
+        const centerX = x * this.tileSize - this.xOffset + this.tileSize / 2
+        const centerY = y * this.tileSize - this.yOffset + this.tileSize / 2
+        const radius = (this.tileSize / 2) * 1.45
+
+        this.ctx.beginPath()
+        this.ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
+        this.ctx.fillStyle = config.drawing.tiles.field.color
+        this.ctx.fill()
+      }
+    })
+  }
+
+  drawForest() {
+    iterateScreenTiles(this.screenSpace, (x, y, tile) => {
+      if (tile.type === 2) {
+        const centerX = x * this.tileSize - this.xOffset + this.tileSize / 2
+        const centerY = y * this.tileSize - this.yOffset + this.tileSize / 2
+        const radius = (this.tileSize / 2) * 1.45
+
+        this.ctx.beginPath()
+        this.ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
+        this.ctx.fillStyle = config.drawing.tiles.forest.color
+        this.ctx.fill()
+      }
+    })
+  }
+
+  drawMountain() {
+    iterateScreenTiles(this.screenSpace, (x, y, tile) => {
+      if (tile.type === 3) {
+        const centerX = x * this.tileSize - this.xOffset + this.tileSize / 2
+        const centerY = y * this.tileSize - this.yOffset + this.tileSize / 2
+        const radius = (this.tileSize / 2) * 1.45
+
+        this.ctx.beginPath()
+        this.ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
+        this.ctx.fillStyle = config.drawing.tiles.mountain.color
+        this.ctx.fill()
+      }
+    })
+  }
+
+  drawIcons() {
+    iterateScreenTiles(this.screenSpace, (x, y, tile) => {
+      const image = getTileIcon(tile)
+      if (image) {
+        this.ctx.drawImage(
+          image,
+          x * this.tileSize + this.iconBorder - this.xOffset,
+          y * this.tileSize + this.iconBorder - this.yOffset,
+          this.iconSize,
+          this.iconSize,
+        )
+      }
+    })
+  }
+
+  drawHoverOutline() {
+    if (document.mouse) {
+      const hoverTilePosition = getTilePositionFromPixel(
+        this.xOffset + document.mouse.mouseX,
+        this.yOffset + document.mouse.mouseY,
+        this.tileSize,
+      )
+      this.ctx.beginPath()
+      this.ctx.rect(
+        hoverTilePosition[0] * this.tileSize - this.xOffset,
+        hoverTilePosition[1] * this.tileSize - this.yOffset,
+        this.tileSize,
+        this.tileSize,
+      )
+      this.ctx.stroke()
     }
+  }
 
-    // Client logic updates
-    this.updateKeys()
-    this.updateScreenSpace()
 
-    // Draw calls
-    this.drawClear()
-    this.drawInit()
 
-    // Draw Terrain
-    this.drawOcean()
-    
-
-   
-
-    
-
-    // // Color  Field
-    // this.world.map.iterateScreen(screenSpace, (x, y, tile) => {
-    //   if (tile.type > 2.5 && tile.type <= 2.9) {
-    //     const centerX = x * this.tileSize - this.xOffset + this.tileSize / 2
-    //     const centerY = y * this.tileSize - this.yOffset + this.tileSize / 2
-    //     const radius = (this.tileSize / 2) * 1.45
-
-    //     ctx.beginPath()
-    //     ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
-    //     ctx.fillStyle = 'rgb(185, 212, 111)'
-    //     ctx.fill()
-    //   }
-    // })
-
-    // // Color  Forest
-    // this.world.map.iterateScreen(screenSpace, (x, y, tile) => {
-    //   if (tile.type > 2.9 && tile.type <= 3.3) {
-    //     const centerX = x * this.tileSize - this.xOffset + this.tileSize / 2
-    //     const centerY = y * this.tileSize - this.yOffset + this.tileSize / 2
-    //     const radius = (this.tileSize / 2) * 1.45
-
-    //     ctx.beginPath()
-    //     ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
-    //     ctx.fillStyle = 'rgb(87, 126, 69)'
-    //     ctx.fill()
-    //   }
-    // })
-
-    // // Color  Mountain
-    // this.world.map.iterateScreen(screenSpace, (x, y, tile) => {
-    //   if (tile.type > 3.3 && tile.type <= 4.0) {
-    //     const centerX = x * this.tileSize - this.xOffset + this.tileSize / 2
-    //     const centerY = y * this.tileSize - this.yOffset + this.tileSize / 2
-    //     const radius = (this.tileSize / 2) * 1.45
-
-    //     ctx.beginPath()
-    //     ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
-    //     ctx.fillStyle = 'rgb(99, 104, 96)'
-    //     ctx.fill()
-    //   }
-    // })
-
-    // // Icons
-    // this.world.map.iterateScreen(screenSpace, (x, y, tile) => {
-    //   const image = this.getTileIcon(tile)
-    //   if (image) {
-    //     ctx.drawImage(
-    //       image,
-    //       x * this.tileSize + iconBorder - this.xOffset,
-    //       y * this.tileSize + iconBorder - this.yOffset,
-    //       iconSize,
-    //       iconSize,
-    //     )
-    //   }
-    // })
-
-    // if (document.mouse) {
+  // if (document.mouse) {
     //   const hoverTile = this.world.map.getTileFromPixel(
     //     this.xOffset + document.mouse.mouseX,
     //     this.yOffset + document.mouse.mouseY,
@@ -204,6 +215,37 @@ export default class Renderer {
     //     ctx.stroke()
     //   }
     // }
+
+  render() {
+    // Increment frames counter
+    this.framesThisSecond++
+
+    // Check if there is data to draw
+    if (!document.gameState) {
+      window.requestAnimationFrame(() => this.render())
+      return
+    }
+
+    // Client logic updates
+    this.updateKeys()
+    this.updateScreenSpace()
+
+    // Draw calls
+    this.drawClear()
+    this.drawInit()
+
+    // Draw Terrain
+    this.drawOcean()
+    this.drawField()
+    this.drawForest()
+    this.drawMountain()
+
+    // Draw Icons
+    this.drawIcons()
+    this.drawHoverOutline()
+
+
+    
 
     // Border
     // this.world.map.iterate((x, y) => {
