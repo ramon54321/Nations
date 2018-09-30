@@ -1,5 +1,5 @@
-import config from './config/config-development'
-// TODO: Replace TARGET_ENV on build
+import config from './config/config-BUILD_ENV'
+export { config }
 import './utils'
 import { debug } from './utils'
 import UserInterface from './ui/UserInterface'
@@ -9,8 +9,6 @@ import Situation from './core/Situation'
 import Store from './Store'
 import CommandQueue from './messaging/CommandQueue'
 import * as MessageBuilder from './messaging/messageBuilder'
-
-console.log(`Built with ${config.environment} config`)
 
 // import * as Diff from 'jsondiffpatch'
 
@@ -48,6 +46,8 @@ export const serverState = {
 
 const userInterface = new UserInterface()
 serverState.userInterface = userInterface
+
+serverState.userInterface.log(`Built with ${config.environment} config`)
 
 const webSocketServer = new WebSocketServer()
 serverState.webSocketServer = webSocketServer
