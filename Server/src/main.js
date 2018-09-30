@@ -71,7 +71,7 @@ serverState.store = store
 situation.addNation('Valcom')
 situation.addNation('Narnia')
 
-store.addDevelopment({ name: 'Mill', consumption: { wood: 2 } })
+store.addDevelopment({ name: 'Mill', consumption: { wood: 2 }, production: { goods: 1 } })
 
 world.getTilesFlat()[0].developments.push(store.developments['mill'])
 world.getTilesFlat()[0].increaseResource('wood', 40)

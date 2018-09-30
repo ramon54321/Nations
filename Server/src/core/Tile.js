@@ -49,7 +49,55 @@ class Tile {
       }
     })
 
-    // TODO: Depending on efficiency, increase resources due to developments
+    // Calculate factor of resource consumption
+    /**
+     * {
+     *  wood: 1.0
+     *  gold: 0.6
+     * }
+     */
+    const resourceConsumptionFactor = {}
+
+    resourceTargetConsumption.forEachProperty((resourceKey, targetConsumption) => {
+      const actualConsumption = resourceActualConsumption[resourceKey]
+      if (!actualConsumption) {
+        resourceConsumptionFactor[resourceKey] = 0
+        return
+      }
+      const factor = actualConsumption / targetConsumption
+      resourceConsumptionFactor[resourceKey] = factor
+    })
+
+    // Calculate total resource production from developments
+    const resourceProduction = {}
+
+    this.developments.forEach(development => {
+      const data = development.getData()
+      if(data.production) {
+        if(data.consumption) {
+          // Calculate production depending on consumption factor
+          // TODO: Calculate how the factor impacts production
+
+          let minimumFactor = 1.0
+          data.consumption.forEachProperty((resourceKey, consumptionAmount) => {
+            if (resourceConsumptionFactor[resourceKey] < minimumFactor) {
+              minimumFactor = resourceConsumptionFactor[resourceKey]
+            }
+          })
+
+          // TODO: Add production to tiles
+
+        } else {
+          // Produce regardless of factors, since cunsumption is not nessesary
+          data.production.forEachProperty((resourceKey, productionAmount) => {
+            resourceProduction[resourceKey] = resourceProduction[resourceKey] ? resourceProduction[resourceKey] + productionAmount : productionAmount
+          })
+
+          // TODO: Drop this out of else, since it is the same potentially?
+        }
+      }
+    })
+
 
   }
 
