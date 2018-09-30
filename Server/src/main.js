@@ -111,8 +111,6 @@ function tick(delta) {
   userInterface.tick()
 }
 
-serverState.userInterface.log(getGameState())
-
 /**
  * General functions
  */

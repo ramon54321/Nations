@@ -3,7 +3,7 @@ const fs = require('fs')
 const replace = require('replace-in-file')
 const environment = process.argv[2]
 
-console.log(`\nBuilding with ${environment} settings.`)
+console.log(`Preprocessing to ${environment}.`)
 
 // Read current version and increment
 const package = JSON.parse(fs.readFileSync('package.json'))
