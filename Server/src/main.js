@@ -2,6 +2,7 @@ import config from './config/config-development'
 // TODO: Replace TARGET_ENV on build
 import './utils'
 import { debug } from './utils'
+import UserInterface from './ui/UserInterface'
 import WebSocketServer from './networking/WebSocketServer'
 import World from './core/World'
 import Situation from './core/Situation'
@@ -39,11 +40,14 @@ console.log(`Built with ${config.environment} config`)
 // console.log(JSON.stringify(stateA, null, 4))
 
 /**
- * Server state and websocket server
+ * Server state, ui and websocket server
  */
 export const serverState = {
   tickNumber: 0
 }
+
+const userInterface = new UserInterface()
+serverState.userInterface = userInterface
 
 const webSocketServer = new WebSocketServer()
 serverState.webSocketServer = webSocketServer
@@ -72,7 +76,7 @@ store.addDevelopment({ name: 'Mill', consumption: { wood: 2 } })
 world.getTilesFlat()[0].developments.push(store.developments['mill'])
 world.getTilesFlat()[0].increaseResource('wood', 40)
 
-// TODO: Client should render state
+// TODO: Client user interface enhancements -> Show resources
 // TODO: Think about how to break apart logic (tiles are king!)
 
 /**
