@@ -16,12 +16,11 @@ execFileSync('rm', ['-rf', 'preprocessed/'])
 execFileSync('cp', ['-R', 'src/', 'preprocessed/'])
 
 try {
-  const changes = replace.sync({
+  replace.sync({
     files: 'preprocessed/**/*.js',
     from: [/__BUILD_ENV__/g, /__VERSION__/g],
     to: [environment, newVersion],
   })
-  // console.log('Modified files:', changes.join(', '))
 
   // Write package.json back to file with updated version
   fs.writeFileSync('package.json', JSON.stringify(package, null, 2))
