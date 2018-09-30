@@ -1,4 +1,4 @@
-import config from './config/config-BUILD_ENV'
+import config from './config/config-__BUILD_ENV__'
 export { config }
 import './utils'
 import { debug } from './utils'
@@ -104,13 +104,19 @@ function tick(delta) {
   tiles.forEach(tile => tile.tick(delta))
 
   // Send GameState to Client
+  serverState.gameState = getGameState()
   webSocketServer.broadcast(MessageBuilder.buildGameStateMessage())
+
+  // Update User Interface
+  userInterface.tick()
 }
+
+serverState.userInterface.log(getGameState())
 
 /**
  * General functions
  */
-export function getGameStateData() {
+export function getGameState() {
   return {
     seed: seed,
     size: size,
@@ -118,6 +124,8 @@ export function getGameStateData() {
     tickNumber: serverState.tickNumber, 
     tiles: world.getTileData(),
     nations: situation.getNationData(),
-    developments: store.getDevelopmentData(),
+    store: {
+      developments: store.getDevelopmentData(),
+    }
   }
 }

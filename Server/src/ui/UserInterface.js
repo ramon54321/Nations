@@ -50,7 +50,7 @@ class UserInterface {
 
     this.boxLeft.append(this.logBox)
 
-    fs.writeFile(this.logFileName, 'Nations Server - v0.0.1 - ' + new Date().toString() + "\n", 'utf8')
+    fs.writeFile(this.logFileName, 'Nations Server - v0.0.1 - ' + new Date().toString() + "\n", 'utf8', () => {})
   }
 
   initRight() {
@@ -62,6 +62,7 @@ class UserInterface {
       border: {
         type: 'line',
       },
+      tags: true,
     })
 
     this.boxRight.append(this.statusBox)
@@ -76,18 +77,21 @@ class UserInterface {
       border: {
         type: 'line',
       },
+      tags: true,
     })
     this.promptEchoBox = Blessed.log({
       bottom: 1,
       right: 0,
       left: 0,
       height: 10,
+      tags: true,
     })
     this.promptBox = Blessed.box({
       bottom: 0,
       right: 0,
       left: 0,
       height: 1,
+      tags: true,
     })
 
     this.boxRight.append(this.promptWrapperBox)
@@ -134,6 +138,16 @@ class UserInterface {
     } else {
       fs.appendFile(this.logFileName, new Date().toString() + ': ' + data + "\n", 'utf8', () => {})
     }
+    this.render()
+  }
+
+  tick() {
+    this.statusBox.setLine(1, `Tick Number: {green-fg}${serverState.tickNumber}{/green-fg}`)
+    this.statusBox.setLine(3, `\t\tGame State`)
+    this.statusBox.setLine(4, `Map Size:\t\t\t{green-fg}${serverState.gameState.size}{/green-fg}\t\tSeed:\t\t{green-fg}${serverState.gameState.seed}{/green-fg}`)
+    this.statusBox.setLine(5, `Name:\t\t\t\t{green-fg}${serverState.gameState.name}{/green-fg}`)
+    this.statusBox.setLine(6, `Tile Count:\t\t  {green-fg}${serverState.gameState.tiles.length}{/green-fg}`)
+
     this.render()
   }
 

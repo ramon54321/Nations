@@ -1,9 +1,9 @@
-import { getGameStateData } from "../main";
+import { serverState } from "../main";
 
 export function buildGameStateMessage() {
   const message = {
     type: 'game-state',
-    data: getGameStateData()
+    data: serverState.gameState
   }
   return message
 }

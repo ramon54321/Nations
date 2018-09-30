@@ -1,11 +1,10 @@
 {
+  "version": "0.0.2",
   "scripts": {
     "start": "yarn run build && RUN_ENV=development node ./lib/main.js",
     "start--production": "RUN_ENV=production node ./lib/main.js",
-    "preprocess": "rm -rf preprocessed && cp -R src/ preprocessed/ && replace-in-file BUILD_ENV development preprocessed/*.js",
-    "preprocess--production": "rm -rf preprocessed && cp -R src/ preprocessed/ && replace-in-file BUILD_ENV production preprocessed/*.js",
-    "build": "yarn run preprocess && rm lib || true && babel preprocessed -d lib",
-    "build--production": "yarn run preprocess--production && rm lib || true && babel preprocessed -d lib"
+    "build": "node build.js development",
+    "build--production": "node build.js production"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
