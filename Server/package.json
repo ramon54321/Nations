@@ -1,15 +1,17 @@
 {
-  "version": "0.0.7",
+  "version": "0.0.29",
   "scripts": {
-    "start": "yarn run build && node ./lib/main.js",
+    "start": "yarn run preprocess && yarn run compile && node ./lib/main.js",
     "start--production": "node ./lib/main.js",
-    "build": "node build.js development",
-    "build--production": "node build.js production"
+    "preprocess": "node preprocess.js development",
+    "preprocess--production": "node preprocess.js production",
+    "compile": "babel preprocessed -d lib"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-transform-spread": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
     "chokidar": "^2.0.4",
     "chokidar-cli": "^1.2.1",
     "concurrently": "^4.0.1",

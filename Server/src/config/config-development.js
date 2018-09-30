@@ -1,4 +1,4 @@
-import config_common from 'config-common'
+import config_common from './config-common'
 
 const config = {
   ...config_common,

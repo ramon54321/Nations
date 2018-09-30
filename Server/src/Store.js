@@ -1,4 +1,4 @@
-import Development from './Development'
+import Development from './core/Development'
 
 class Store {
   constructor() {

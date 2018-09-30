@@ -1,6 +1,6 @@
 import Blessed from 'blessed'
 import fs from 'fs'
-import { serverState } from '../main';
+import { serverState, config } from '../main';
 
 class UserInterface {
   constructor() {
@@ -67,7 +67,7 @@ class UserInterface {
 
     this.boxRight.append(this.statusBox)
 
-    this.statusBox.setLine(0, 'Nations Server - Version 0.0.1')
+    this.statusBox.setLine(0, `Nations Server - Version:${config.version}`)
 
     this.promptWrapperBox = Blessed.box({
       bottom: 0,
