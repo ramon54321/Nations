@@ -3,7 +3,7 @@ const fs = require('fs')
 const replace = require('replace-in-file')
 const environment = process.argv[2]
 
-console.log(`Building with ${environment} settings.`)
+console.log(`\nBuilding with ${environment} settings.`)
 
 const package = JSON.parse(fs.readFileSync('package.json'))
 const versionMajor = package.version.split('.')[0]
@@ -21,14 +21,17 @@ try {
     from: [/__BUILD_ENV__/g, /__VERSION__/g],
     to: [environment, newVersion],
   })
-  console.log('Modified files:', changes.join(', '))
+  // console.log('Modified files:', changes.join(', '))
+
   // Write package.json back to file with updated version
   fs.writeFileSync('package.json', JSON.stringify(package, null, 2))
-
-  console.log('\nSuccessfully built: ' + newVersion)
+  console.log('Successfully built: ' + newVersion)
 } catch (error) {
   console.error('Error occurred:', error)
 }
+console.log()
+
+execFileSync('rm', ['-rf', 'preprocessed/'])
 
 // {
 //   "version": "0.0.1",
