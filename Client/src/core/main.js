@@ -29,6 +29,9 @@ function initAssets() {
       field: document.getElementById('source-field'),
       forest: document.getElementById('source-forest'),
     },
+    developments: {
+      mill: document.getElementById('source-developments-mill'),
+    }
   }
 }
 

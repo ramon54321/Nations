@@ -6,7 +6,7 @@ import UserInterface from './ui/UserInterface'
 import WebSocketServer from './networking/WebSocketServer'
 import World from './core/World'
 import Situation from './core/Situation'
-import Store from './Store'
+// import Store from '../Store'
 import CommandQueue from './messaging/CommandQueue'
 import * as MessageBuilder from './messaging/messageBuilder'
 
@@ -65,16 +65,27 @@ serverState.world = world
 const situation = new Situation()
 serverState.situation = situation
 
-const store = new Store()
+const store = {
+  developments: {
+    mill: {
+      id: "mill",
+      name: "Mill",
+      consumption: {
+        wood: 2,
+      },
+      production: {
+        goods: 0.2
+      }
+    }
+  }
+}
 serverState.store = store
 
 situation.addNation('Valcom')
 situation.addNation('Narnia')
 
-store.addDevelopment({ name: 'Mill', consumption: { wood: 2 }, production: { goods: 1 } })
-
-world.getTilesFlat()[0].developments.push(store.developments['mill'])
-world.getTilesFlat()[0].increaseResource('wood', 40)
+world.getTile(7, 4).developments["ne"] = store.developments['mill']
+world.getTile(7, 4).increaseResource('wood', 40)
 
 // TODO: Client user interface enhancements -> Show resources
 // TODO: Think about how to break apart logic (tiles are king!)
@@ -111,19 +122,19 @@ function tick(delta) {
   userInterface.tick()
 }
 
+serverState.userInterface.log(getGameState())
+
 /**
  * General functions
  */
 export function getGameState() {
   return {
+    tickNumber: serverState.tickNumber,
     seed: seed,
     size: size,
     name: name,
-    tickNumber: serverState.tickNumber, 
-    tiles: world.getTileData(),
+    store: store,
+    tiles: world.getTilesData(),
     nations: situation.getNationData(),
-    store: {
-      developments: store.getDevelopmentData(),
-    }
   }
 }

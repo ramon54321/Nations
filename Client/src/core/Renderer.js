@@ -1,5 +1,5 @@
 import { document, config } from './main'
-import { iterateScreenTiles, getTileIcon, getTilePositionFromPixel } from './utils'
+import { iterateScreenTiles, getTileIcon, getTilePositionFromPixel, ninthPosition, forEachProperty, roundedPoly } from './utils'
 import { observable, decorate } from 'mobx'
 
 export default class Renderer {
@@ -125,11 +125,23 @@ export default class Renderer {
     this.yVelocity /= 1.1
   }
 
+  updateMouse() {
+    if (document.mouse) {
+      const hoverTilePosition = getTilePositionFromPixel(
+        this.xOffset + document.mouse.mouseX,
+        this.yOffset + document.mouse.mouseY,
+        this.tileSize,
+      )
+      this.mouseTileX = hoverTilePosition[0]
+      this.mouseTileY = hoverTilePosition[1]
+    }
+  }
+
   updateScreenSpace() {
-    this.screenSpace.xOffset = Math.floor(this.xOffset / this.tileSize) - 1
-    this.screenSpace.xTiles = this.width / this.tileSize + 2
-    this.screenSpace.yOffset = Math.floor(this.yOffset / this.tileSize) - 1
-    this.screenSpace.yTiles = this.height / this.tileSize + 2
+    this.screenSpace.xOffset = Math.floor(this.xOffset / this.tileSize)
+    this.screenSpace.xTiles = this.width / this.tileSize + 1
+    this.screenSpace.yOffset = Math.floor(this.yOffset / this.tileSize)
+    this.screenSpace.yTiles = this.height / this.tileSize + 1
     this.screenSpace.size = document.gameState.size
   }
 
@@ -141,8 +153,9 @@ export default class Renderer {
     this.ctx.strokeStyle = 'rgba(235,235,235, 0.4)'
     this.ctx.lineWidth = 1
 
-    this.iconSize = this.tileSize * 0.5
-    this.iconBorder = (this.tileSize - this.iconSize) / 2
+    this.iconSizeTerrain = this.tileSize / 2
+    this.iconSizeDevelopment = this.tileSize / 3
+    this.iconBorder = (this.tileSize - this.iconSizeTerrain) / 2
   }
 
   drawOcean() {
@@ -205,7 +218,7 @@ export default class Renderer {
     })
   }
 
-  drawIcons() {
+  drawIconsTerrain() {
     // Last denominator in the following line determines icon fade
     const speedFade = Math.max(4 - (Math.abs(this.xVelocity) + Math.abs(this.yVelocity)) / 2, 0) / 6
     this.ctx.globalAlpha = speedFade
@@ -216,15 +229,41 @@ export default class Renderer {
           image,
           x * this.tileSize + this.iconBorder - this.xOffset,
           y * this.tileSize + this.iconBorder - this.yOffset,
-          this.iconSize,
-          this.iconSize,
+          this.iconSizeTerrain,
+          this.iconSizeTerrain,
         )
       }
     })
     this.ctx.globalAlpha = 1.0
   }
 
+  drawIconsDevelopments() {
+    // Last denominator in the following line determines icon fade
+    const speedFade = Math.max(4 - (Math.abs(this.xVelocity) + Math.abs(this.yVelocity)) / 2, 0) / 6
+    this.ctx.globalAlpha = speedFade
+    iterateScreenTiles(this.screenSpace, (x, y, tile) => {
+      if (tile.developments) {
+        forEachProperty(tile.developments, ((ninth, development) => {
+          const image = document.assets.developments[development.id]
+          if (image) {
+            this.ctx.drawImage(
+              image,
+              x * this.tileSize + ninthPosition[ninth][0] * this.iconSizeDevelopment - this.xOffset,
+              y * this.tileSize + ninthPosition[ninth][1] * this.iconSizeDevelopment - this.yOffset,
+              this.iconSizeDevelopment,
+              this.iconSizeDevelopment,
+            )
+          }
+        }))
+      }
+
+      
+    })
+    this.ctx.globalAlpha = 1.0
+  }
+
   drawHoverOutline() {
+    // TODO: Use this.mouseTile values instead
     if (document.mouse) {
       const hoverTilePosition = getTilePositionFromPixel(
         this.xOffset + document.mouse.mouseX,
@@ -260,6 +299,7 @@ export default class Renderer {
 
     // Client logic updates
     this.updateCamera(delta)
+    this.updateMouse()
     this.updateScreenSpace()
 
     // Draw calls
@@ -274,8 +314,14 @@ export default class Renderer {
 
     // Draw Icons
     if (this.isShowIcons && !isMovingFast) {
-      this.drawIcons()
+      this.drawIconsTerrain()
+      this.drawIconsDevelopments()
     }
+
+    // TODO: Draw nation outline
+    // this.ctx.beginPath()
+    // roundedPoly(this.ctx, [{x: 500, y: 500}, {x: 500, y: 800}, {x: 700, y: 700}], 200)
+    // this.ctx.stroke()
 
     // Draw Hover Outline
     if (!isMovingFast) {
@@ -286,5 +332,7 @@ export default class Renderer {
   }
 }
 decorate(Renderer, {
-  isShowIcons: observable
+  isShowIcons: observable,
+  mouseTileX: observable,
+  mouseTileY: observable,
 })

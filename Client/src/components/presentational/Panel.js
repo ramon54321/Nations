@@ -12,6 +12,7 @@ const Panel = observer(props => (
       <li>Trade</li>
       <li>Diplomacy</li>
       <li>Research</li>
+      <li>Tile: {document.renderer.mouseTileX}, {document.renderer.mouseTileY}</li>
     </ul>
   </div>
 ))

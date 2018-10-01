@@ -9,7 +9,7 @@ class Tile {
     
     this.population = {}
     this.resources = {}
-    this.developments = []
+    this.developments = {}
   }
 
   /**
@@ -35,10 +35,9 @@ class Tile {
     const resourceActualConsumption = {}
 
     // Try to consume resources for each development
-    this.developments.forEach(development => {
-      const data = development.getData()
-      if(data.consumption) {
-        data.consumption.forEachProperty((resourceKey, consumptionAmount) => {
+    this.developments.forEachProperty((ninth, development) => {
+      if(development.consumption) {
+        development.consumption.forEachProperty((resourceKey, consumptionAmount) => {
           resourceTargetConsumption[resourceKey] = resourceTargetConsumption[resourceKey] ?
             resourceTargetConsumption[resourceKey] + consumptionAmount : consumptionAmount
 
@@ -71,15 +70,14 @@ class Tile {
     // Calculate total resource production from developments
     const resourceProduction = {}
 
-    this.developments.forEach(development => {
-      const data = development.getData()
-      if(data.production) {
-        if(data.consumption) {
+    this.developments.forEachProperty((ninth, development) => {
+      if(development.production) {
+        if(development.consumption) {
           // Calculate production depending on consumption factor
           // TODO: Calculate how the factor impacts production
 
           let minimumFactor = 1.0
-          data.consumption.forEachProperty((resourceKey, consumptionAmount) => {
+          development.consumption.forEachProperty((resourceKey, consumptionAmount) => {
             if (resourceConsumptionFactor[resourceKey] < minimumFactor) {
               minimumFactor = resourceConsumptionFactor[resourceKey]
             }
@@ -89,7 +87,7 @@ class Tile {
 
         } else {
           // Produce regardless of factors, since cunsumption is not nessesary
-          data.production.forEachProperty((resourceKey, productionAmount) => {
+          development.production.forEachProperty((resourceKey, productionAmount) => {
             resourceProduction[resourceKey] = resourceProduction[resourceKey] ? resourceProduction[resourceKey] + productionAmount : productionAmount
           })
 
@@ -97,8 +95,6 @@ class Tile {
         }
       }
     })
-
-
   }
 
   /**
@@ -136,10 +132,23 @@ class Tile {
     return amount
   }
 
+  _getDevelopmentData() {
+    const developmentData = {}
+    this.developments.forEachProperty((ninth, development) => {
+      developmentData[ninth] = {
+        id: development.id
+      }
+    })
+    return developmentData
+  }
+
   getData() {
+    const resources = this.resources
+    const developments = this._getDevelopmentData()
     return {
       type: this.type,
-      resources: this.resources
+      resources: Object.keys(resources).length !== 0 ? resources : undefined,
+      developments: Object.keys(developments).length !== 0 ? developments : undefined,
     }
   }
 }

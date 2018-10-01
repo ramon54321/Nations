@@ -1,5 +1,5 @@
 {
-  "version": "0.0.31",
+  "version": "0.0.61",
   "scripts": {
     "start": "yarn run preprocess && yarn run compile && node ./lib/main.js",
     "start--production": "node ./lib/main.js",

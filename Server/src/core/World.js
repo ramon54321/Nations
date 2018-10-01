@@ -32,7 +32,7 @@ class World {
     return this.tiles.flat()
   }
 
-  getTileData() {
+  getTilesData() {
     const tileData = []
     const tiles = this.getTilesFlat()
     for (let i = 0; i < tiles.length; i++) {
