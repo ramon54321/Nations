@@ -101,12 +101,34 @@ export default class Renderer {
     // Set Zoom
     if (document.keys[81]) {
       if (this.zoomFactor > 1) {
+        if (this.zoomFactor === 2) {
+          this.xOffset = this.xOffset - this.width / 2
+          this.xOffset = this.xOffset / 2
+          this.yOffset = this.yOffset - this.height / 2
+          this.yOffset = this.yOffset / 2
+        } else if (this.zoomFactor === 3) {
+          this.xOffset = this.xOffset - this.width / 4
+          this.xOffset = this.xOffset / 1.5
+          this.yOffset = this.yOffset - this.height / 4
+          this.yOffset = this.yOffset / 1.5
+        }
         this.zoomFactor--
         document.keys[81] = false
       }
     } else if (document.keys[69]) {
       if (this.zoomFactor < 3) {
         this.zoomFactor++
+        if (this.zoomFactor === 2) {
+          this.xOffset = this.xOffset * 2
+          this.xOffset = this.xOffset + this.width / 2
+          this.yOffset = this.yOffset * 2
+          this.yOffset = this.yOffset + this.height / 2
+        } else if (this.zoomFactor === 3) {
+          this.xOffset = this.xOffset * 1.5
+          this.xOffset = this.xOffset + this.width / 4
+          this.yOffset = this.yOffset * 1.5
+          this.yOffset = this.yOffset + this.height / 4
+        }
         document.keys[69] = false
       }
     }
