@@ -5,6 +5,7 @@
   list-style: none; }
 
 .nations .panel {
+  position: absolute;
   color: #303030;
   width: 340px; }
   .nations .panel li {
@@ -13,7 +14,6 @@
     color: #fcfcfc;
     margin-top: 0px;
     margin-bottom: 0px;
-    background-color: #3c88bb;
     padding-left: 2em;
     transition-duration: 0.5s; }
     .nations .panel li:hover {
@@ -22,8 +22,11 @@
 
 .nations canvas {
   display: inline-block;
-  vertical-align: top;
-  border: 2px solid #303030; }
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -10;
+  vertical-align: top; }
 
 .nations #nations {
   display: inline-block;

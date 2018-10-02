@@ -2,19 +2,39 @@ import React from 'react'
 import Header from './Header'
 
 import { observer } from 'mobx-react'
+import { forEachProperty, mapProperty } from '../../core/utils'
 
-const Panel = observer(props => (
-  <div className="panel">
-    <Header text={props.header} />
-    <ul>
-      <li>Population</li>
-      <li onClick={() => document.renderer.toggleIcons()}>{document.renderer.isShowIcons ? "Turn Icons Off" : "Turn Icons On"}</li>
-      <li>Trade</li>
-      <li>Diplomacy</li>
-      <li>Research</li>
-      <li>Tile: {document.renderer.mouseTileX}, {document.renderer.mouseTileY}</li>
-    </ul>
-  </div>
-))
+function getTile() {
+  const x = document.renderer.mouseTileX
+  const y = document.renderer.mouseTileY
+  if(x && y) {
+    return document.gameState.getTile(x, y)
+  }
+}
+
+const Panel = observer(
+  class Panel extends React.Component {
+    constructor(props) {
+      super(props)
+    }
+    render() {
+
+      const developments = getTile() && mapProperty(getTile().developments, (ninth, development) => <li>{development.id}</li>)
+
+      return (
+        <div className="panel">
+          <Header text={this.props.header} />
+          <ul>
+            <li>Tick: {document.gameState.state.tickNumber}</li>
+            {developments}
+          </ul>
+          <button onClick={() => document.renderer.toggleIcons()}>
+            {document.renderer.isShowIcons ? 'Turn Icons Off' : 'Turn Icons On'}
+          </button>
+        </div>
+      )
+    }
+  }
+)
 
 export default Panel

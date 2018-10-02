@@ -1,6 +1,9 @@
 .panel {
+  position: absolute;
   color: $color-dark;
   width: $panel-width;
+
+  // background: linear-gradient(to right, $color-primary 0%, transparentize($color-primary, 1.0) 100%);
 
   li {
     height: 50px;
@@ -8,7 +11,7 @@
     color: $color-white;
     margin-top: 0px;
     margin-bottom: 0px;
-    background-color: $color-primary;
+    // background-color: $color-primary;
     padding-left: 2em;
     transition-duration: 0.5s;
 
@@ -21,8 +24,12 @@
 
 canvas {
   display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -10;
   vertical-align: top;
-  border: 2px solid $color-dark;
+  // border: 2px solid $color-dark;
 }
 
 #nations {

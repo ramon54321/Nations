@@ -12,12 +12,29 @@ export function getTileIcon(tile) {
 }
 
 export function forEachProperty(object, callback) {
+  if (!object) {
+    return null
+  }
   for (const key in object) {
     if (object.hasOwnProperty(key)) {
       const value = object[key]
       callback(key, value)
     }
   }
+}
+
+export function mapProperty(object, callback) {
+  if (!object) {
+    return null
+  }
+  const acc = []
+  for (const key in object) {
+    if (object.hasOwnProperty(key)) {
+      const value = object[key]
+      acc.push(callback(key, value))
+    }
+  }
+  return acc
 }
 
 export function getTilePositionFromPixel(xPixel, yPixel, tileSize) {
@@ -35,10 +52,10 @@ export function iterateScreenTiles(options, callback) {
   for (let y = yStart; y < yEnd; y++) {
     for (let x = xStart; x < xEnd; x++) {
       if (
-        document.gameState.tiles != undefined &&
-        document.gameState.tiles[y * size + x] != undefined
+        document.gameState.state.tiles != undefined &&
+        document.gameState.state.tiles[y * size + x] != undefined
       ) {
-        callback(x, y, document.gameState.tiles[y * size + x])
+        callback(x, y, document.gameState.state.tiles[y * size + x])
       }
     }
   }

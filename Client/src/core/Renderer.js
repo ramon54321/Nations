@@ -10,7 +10,9 @@ export default class Renderer {
     this.initCamera()
     this.initOptions()
 
-    this.tileSize = 96
+    this.zoomFactor = 2
+    this.tileSizeBase = 96
+    this.tileSize = this.tileSizeBase * this.zoomFactor
     this.screenSpace = {}
     this.renderLastTime = Date.now()
 
@@ -23,8 +25,8 @@ export default class Renderer {
     // console.log(document.gameState)
 
     // Set middle of map
-    this.xOffset = (this.tileSize * document.gameState.size) / 2 - this.width / 2
-    this.yOffset = (this.tileSize * document.gameState.size) / 2 - this.height / 2
+    this.xOffset = (this.tileSize * document.gameState.state.size) / 2 - this.width / 2
+    this.yOffset = (this.tileSize * document.gameState.state.size) / 2 - this.height / 2
   }
 
   initCanvas() {
@@ -32,8 +34,8 @@ export default class Renderer {
     this.canvas = document.getElementById('canvas')
 
     // 896
-    this.width = 896
-    this.height = 896
+    this.width = window.innerWidth
+    this.height = window.innerHeight
     this.canvas.style.width = this.width + 'px'
     this.canvas.style.height = this.height + 'px'
 
@@ -96,6 +98,20 @@ export default class Renderer {
   }
 
   updateCamera(delta) {
+    // Set Zoom
+    if (document.keys[81]) {
+      if (this.zoomFactor > 1) {
+        this.zoomFactor--
+        document.keys[81] = false
+      }
+    } else if (document.keys[69]) {
+      if (this.zoomFactor < 3) {
+        this.zoomFactor++
+        document.keys[69] = false
+      }
+    }
+    this.tileSize = this.tileSizeBase * this.zoomFactor
+
     // Change Velocity
     if (document.keys[68]) {
       if (this.xVelocity < this.cameraMaxVelocity) {
@@ -140,9 +156,9 @@ export default class Renderer {
   updateScreenSpace() {
     this.screenSpace.xOffset = Math.floor(this.xOffset / this.tileSize)
     this.screenSpace.xTiles = this.width / this.tileSize + 1
-    this.screenSpace.yOffset = Math.floor(this.yOffset / this.tileSize)
-    this.screenSpace.yTiles = this.height / this.tileSize + 1
-    this.screenSpace.size = document.gameState.size
+    this.screenSpace.yOffset = Math.floor(this.yOffset / this.tileSize) - 1
+    this.screenSpace.yTiles = this.height / this.tileSize + 2
+    this.screenSpace.size = document.gameState.state.size
   }
 
   drawClear() {

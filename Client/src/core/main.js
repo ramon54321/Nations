@@ -5,6 +5,7 @@ import Renderer from './Renderer'
 import ReactDOM from 'react-dom'
 import React from 'react'
 import Panel from '../components/presentational/Panel'
+import GameState from './GameState';
 
 window.onload = function() {
   initConfig()
@@ -13,7 +14,6 @@ window.onload = function() {
   initGameState()
   initRenderer()
   initWebSocketConnection()
-  initUserInterface()
 }
 
 function initConfig() {
@@ -31,7 +31,7 @@ function initAssets() {
     },
     developments: {
       mill: document.getElementById('source-developments-mill'),
-    }
+    },
   }
 }
 
@@ -67,10 +67,11 @@ function initWebSocketConnection() {
 
     if (message.type === 'game-state') {
       if (!document.gameState) {
-        document.gameState = message.data
+        document.gameState = new GameState(message.data)
         document.renderer.onInitialGameState()
+        initUserInterface()
       } else {
-        document.gameState = message.data
+        document.gameState.updateState(message.data)
       }
     }
   }
@@ -79,10 +80,7 @@ function initWebSocketConnection() {
 }
 
 function initUserInterface() {
-  ReactDOM.render(
-    <Panel header="Nations" state={document.gameState} />,
-    document.getElementById('nations'),
-  )
+  ReactDOM.render(<Panel header="Nations" />, document.getElementById('nations'))
 }
 
 export { document }
