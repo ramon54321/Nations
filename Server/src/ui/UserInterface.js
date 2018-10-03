@@ -15,19 +15,23 @@ class UserInterface {
   }
 
   initScreen() {
-    this.screen = Blessed.screen()
+    this.screen = Blessed.screen({
+      dockBorders: true,
+    })
 
     this.boxLeft = Blessed.box({
       top: 0,
       left: 0,
-      width: '50%',
+      width: '51%',
       height: '100%',
+      dockBorders: true,
     })
     this.boxRight = Blessed.box({
       top: 0,
       right: 0,
-      width: '50%',
+      width: '51%',
       height: '100%',
+      dockBorders: true,
     })
 
     this.screen.append(this.boxLeft)
@@ -64,6 +68,7 @@ class UserInterface {
         type: 'line',
       },
       tags: true,
+      dockBorders: true,
     })
 
     this.boxRight.append(this.statusBox)
@@ -79,6 +84,7 @@ class UserInterface {
         type: 'line',
       },
       tags: true,
+      dockBorders: true,
     })
     this.promptEchoBox = Blessed.log({
       bottom: 1,
@@ -86,6 +92,7 @@ class UserInterface {
       left: 0,
       height: 10,
       tags: true,
+      dockBorders: true,
     })
     this.promptBox = Blessed.box({
       bottom: 0,
@@ -93,6 +100,7 @@ class UserInterface {
       left: 0,
       height: 1,
       tags: true,
+      dockBorders: true,
     })
 
     this.boxRight.append(this.promptWrapperBox)
@@ -194,7 +202,7 @@ class UserInterface {
   }
 
   render() {
-    this.statusBox.setLine(14, `State: {red-fg}${this.state === this.STATE_COMMAND ? "COMMAND" : "INPUT"}{/red-fg}`)
+    this.statusBox.setLine(13, `State: {red-fg}${this.state === this.STATE_COMMAND ? "COMMAND" : "INPUT"}{/red-fg}`)
 
     this.screen.render()
   }
