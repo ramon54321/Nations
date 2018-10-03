@@ -19,7 +19,9 @@ const Panel = observer(
     }
     render() {
 
-      const developments = getTile() && mapProperty(getTile().developments, (ninth, development) => <li>{development.id}</li>)
+      const tile = getTile()
+      const developments = tile && mapProperty(tile.developments, (ninth, development) => <li>{development.id}</li>)
+      const resources = tile && mapProperty(tile.resources, (resource, amount) => <li>{resource}: {amount}</li>)
 
       return (
         <div className="panel">
@@ -27,6 +29,7 @@ const Panel = observer(
           <ul>
             <li>Tick: {document.gameState.state.tickNumber}</li>
             {developments}
+            {resources}
           </ul>
           <button onClick={() => document.renderer.toggleIcons()}>
             {document.renderer.isShowIcons ? 'Turn Icons Off' : 'Turn Icons On'}
