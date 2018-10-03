@@ -1,3 +1,5 @@
+import { serverState } from "./main";
+
 Object.prototype.forEachProperty = function(callback) {
   for (const key in this) {
     if (this.hasOwnProperty(key)) {
@@ -26,7 +28,5 @@ export function generateGuid() {
 }
 
 export function debug(data) {
-  if (data) {
-    console.log(JSON.stringify(data, null, 4))
-  }
+  serverState.userInterface.log(data)
 }

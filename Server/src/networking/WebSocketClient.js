@@ -1,5 +1,5 @@
 import WebSocket from 'ws'
-import { generateGuid } from '../utils'
+import { generateGuid, debug } from '../utils'
 
 class WebSocketClient {
   constructor(webSocketServer, webSocket) {
@@ -27,7 +27,7 @@ class WebSocketClient {
   initializeMessageDispatcher() {
     const shortGuid = this.getShortGuid()
     this.webSocket.on('message', message => {
-      console.log(`${shortGuid}: ${message}`)
+      debug(`${shortGuid}: ${message}`)
     })
   }
 

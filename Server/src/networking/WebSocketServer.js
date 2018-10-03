@@ -1,5 +1,6 @@
 import WebSocket from 'ws'
 import WebSocketClient from './WebSocketClient'
+import { debug } from '../utils'
 
 class WebSocketServer {
   constructor() {
@@ -13,7 +14,7 @@ class WebSocketServer {
     message = JSON.stringify(message)
     const client = this.webSocketClients.get(clientGuid)
     if (!client) {
-      console.log(`Error sending message to ${clientGuid}. Client does not exist.`)
+      debug(`Error sending message to ${clientGuid}. Client does not exist.`)
       return
     }
 

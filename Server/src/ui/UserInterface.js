@@ -1,6 +1,7 @@
 import Blessed from 'blessed'
 import fs from 'fs'
 import { serverState, config } from '../main';
+import { debug } from '../utils';
 
 class UserInterface {
   constructor() {
@@ -32,9 +33,9 @@ class UserInterface {
     this.screen.append(this.boxLeft)
     this.screen.append(this.boxRight)
 
-    this.screen.key(['escape'], (ch, key) => {
-      return process.exit(0)
-    })
+    // this.screen.key(['escape'], (ch, key) => {
+    //   return process.exit(0)
+    // })
   }
 
   initLeft() {
@@ -105,29 +106,70 @@ class UserInterface {
 
     this.promptBox.prompt()
 
-    this.promptBox.key(textKeys, (ch, key) => {
-      this.promptBox.setContent(this.promptBox.content + ch)
-      this.render()
+    this.registerKeyBindings()
+  }
+
+  registerKeyBindings() {
+
+    this.STATE_COMMAND = 0
+    this.STATE_INPUT = 1
+    this.state = this.STATE_COMMAND
+
+    this.screen.on('keypress', (ch, key) => {
+      const keyName = key.name
+      if (this.state === this.STATE_COMMAND) {
+        this.handleKeyCommand(keyName, ch)
+      } else if (this.state === this.STATE_INPUT) {
+        this.handleKeyInput(keyName, ch)
+      }
     })
-    
-    this.promptBox.key(['backspace'], (ch, key) => {
+  }
+
+  handleKeyCommand(keyName, ch) {
+    switch(keyName) {
+      case 'escape':
+        return process.exit(0)
+        break
+      case 'i':
+        this.state = this.STATE_INPUT
+        break
+      case 'o':
+        ch === 'o' ? this.logBox.scroll(-1) : this.logBox.scroll(-25)
+        break
+      case 'l':
+        ch === 'l' ? this.logBox.scroll(1) : this.logBox.scroll(25)
+        break
+    }
+    this.render()
+  }
+
+  handleKeyInput(keyName, ch) {
+    if(textKeys.indexOf(keyName) != -1) {
+      this.promptBox.setContent(this.promptBox.content + ch)
+    } else if (keyName === 'backspace') {
       if (this.promptBox.content.length > this.promptText.length) {
         this.promptBox.setContent(this.promptBox.content.substr(0, this.promptBox.content.length - 1))
       }
-      this.render()
-    })
-
-    this.promptBox.key(['enter'], (ch, key) => {
+    } else if (keyName === 'enter') {
       const command = this.promptBox.content.substr(this.promptText.length)
       this.promptEchoBox.log(command)
       this.processCommand(command)
       this.promptBox.prompt()
-      this.render()
-    })
+    } else if (keyName === 'escape') {
+      this.state = this.STATE_COMMAND
+    }
+    this.render()
   }
 
   processCommand(command) {
-    serverState.userInterface.log(command)
+
+    switch(command) {
+      case 'clear':
+        this.render()
+        break
+    }
+
+    debug(command)
   }
 
   log(data) {
@@ -152,6 +194,8 @@ class UserInterface {
   }
 
   render() {
+    this.statusBox.setLine(14, `State: {red-fg}${this.state === this.STATE_COMMAND ? "COMMAND" : "INPUT"}{/red-fg}`)
+
     this.screen.render()
   }
 }

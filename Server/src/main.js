@@ -47,7 +47,7 @@ export const serverState = {
 const userInterface = new UserInterface()
 serverState.userInterface = userInterface
 
-serverState.userInterface.log(`Built with ${config.environment} config`)
+debug(`Built with ${config.environment} config`)
 
 const webSocketServer = new WebSocketServer()
 serverState.webSocketServer = webSocketServer
@@ -122,7 +122,7 @@ function tick(delta) {
   userInterface.tick()
 }
 
-serverState.userInterface.log(getGameState())
+debug(getGameState())
 
 /**
  * General functions
