@@ -152,7 +152,7 @@ class UserInterface {
   }
 
   handleKeyInput(keyName, ch) {
-    if(textKeys.indexOf(keyName) != -1) {
+    if(textKeys.indexOf(ch) != -1 || keyName === 'space') {
       this.promptBox.setContent(this.promptBox.content + ch)
     } else if (keyName === 'backspace') {
       if (this.promptBox.content.length > this.promptText.length) {
@@ -175,6 +175,17 @@ class UserInterface {
       case 'clear':
         this.render()
         break
+    }
+
+    // Spawn Development
+    if (command.startsWith("spawn development")) {
+      const commandWords = command.split(" ")
+      const x = commandWords[2]
+      const y = commandWords[3]
+      const ninth = commandWords[4]
+      const developmentId = commandWords[5]
+      serverState.world.getTile(x, y).developments[ninth] = serverState.store.developments[developmentId]
+      debug("Spawned Development")
     }
 
     debug(command)
@@ -235,32 +246,32 @@ const textKeys = [
   'x',
   'y',
   'z',
-  'S-a',
-  'S-b',
-  'S-c',
-  'S-d',
-  'S-e',
-  'S-f',
-  'S-g',
-  'S-h',
-  'S-i',
-  'S-j',
-  'S-k',
-  'S-l',
-  'S-m',
-  'S-n',
-  'S-o',
-  'S-p',
-  'S-q',
-  'S-r',
-  'S-s',
-  'S-t',
-  'S-u',
-  'S-v',
-  'S-w',
-  'S-x',
-  'S-y',
-  'S-z',
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'L',
+  'M',
+  'N',
+  'O',
+  'P',
+  'Q',
+  'R',
+  'S',
+  'T',
+  'U',
+  'V',
+  'W',
+  'X',
+  'Y',
+  'Z',
   '[',
   '{',
   ']',
