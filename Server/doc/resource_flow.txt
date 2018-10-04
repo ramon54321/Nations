@@ -1,0 +1,20 @@
+
+
+Level 0 - Elements (Unusable)
+
+  goldReserve
+  woodReserve
+  ironReserve
+
+
+Level 2 - Produced (Produced from Level 1)
+
+  food
+
+                         ->         wheat (Wheat Farm)
+  woodReserve           ->         wood (Logging Outpost)
+  goldReserve           ->         gold (Gold Mine)
+  ironReserve           ->         iron (Iron Mine)
+
+  wood                   ->         lumber (Lumber Yard)
+

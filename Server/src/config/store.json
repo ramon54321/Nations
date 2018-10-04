@@ -1,0 +1,61 @@
+{
+  "developments": {
+    "mill": {
+      "id": "mill",
+      "name": "Mill",
+      "consumption": {
+        "wood": 10
+      },
+      "production": {
+        "goods": 1
+      }
+    },
+    "wheatFarm": {
+      "id": "wheatFarm",
+      "name": "Wheat Farm",
+      "production": {
+        "wheat": 1
+      }
+    },
+    "loggingOutpost": {
+      "id": "loggingOutpost",
+      "name": "Logging Outpost",
+      "consumption": {
+        "woodReserve": 1
+      },
+      "production": {
+        "wood": 1
+      }
+    },
+    "goldMine": {
+      "id": "goldMine",
+      "name": "Gold Mine",
+      "consumption": {
+        "goldReserve": 1
+      },
+      "production": {
+        "gold": 1
+      }
+    },
+    "ironMine": {
+      "id": "ironMine",
+      "name": "Iron Mine",
+      "consumption": {
+        "ironReserve": 1
+      },
+      "production": {
+        "iron": 1
+      }
+    },
+    "lumberYard": {
+      "id": "lumberYard",
+      "name": "Lumber Yard",
+      "consumption": {
+        "wood": 1
+      },
+      "production": {
+        "lumber": 1
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import { serverState } from "./main";
+import { perlin } from "./generation/noise";
 
 Object.prototype.forEachProperty = function(callback) {
   for (const key in this) {
@@ -25,6 +26,17 @@ export function generateGuid() {
       v = c == 'x' ? r : (r & 0x3) | 0x8
     return v.toString(16)
   })
+}
+
+export function random(generator) {
+  const a = (perlin(generator, generator, generator * 12.34567) + 1) / 2
+  const b = (perlin(generator, a, a * 12.34567) + 1) / 2
+  const c = (perlin(b, a, generator * 12.34567) + 1) / 2
+  return c
+}
+
+export function perlinNormalized(x, y, freq) {
+  return (perlin(x, y, freq) + 1) / 2
 }
 
 export function debug(data) {

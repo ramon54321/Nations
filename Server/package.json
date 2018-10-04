@@ -1,11 +1,11 @@
 {
-  "version": "0.0.94",
+  "version": "0.0.126",
   "scripts": {
     "start": "yarn run preprocess && yarn run compile && node ./lib/main.js",
     "start--production": "node ./lib/main.js",
     "preprocess": "node preprocess.js development",
     "preprocess--production": "node preprocess.js production",
-    "compile": "babel preprocessed -d lib"
+    "compile": "babel preprocessed -d lib --copy-files --source-maps"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",

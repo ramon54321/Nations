@@ -1,22 +1,24 @@
 import { perlin } from '../generation/noise'
+import { debug, perlinNormalized, random } from '../utils'
+import { serverState } from '../main';
 
 class Tile {
   constructor(x, y) {
     this.x = x
     this.y = y
 
-    this.init()
-    
     this.population = {}
     this.resources = {}
     this.developments = {}
+
+    this.init()
   }
 
   /**
    * Generate initial values from random generator
    */
   init() {
-    const generatedHeight = (perlin((this.x / 80), (this.y / 80), 11.5) + 1) / 2
+    const generatedHeight = perlinNormalized(this.x / 80, this.y / 80, 11.5)
     this.height = generatedHeight * 4
     if (this.height < 2.5) {
       this.type = 0
@@ -27,6 +29,22 @@ class Tile {
     } else if (this.height < 4) {
       this.type = 3
     }
+
+    this.initResources()
+  }
+
+  initResources() {
+    const tileRules = serverState.rules.tiles.types[this.type]
+
+    if (!tileRules) {
+      console.error("Can not init tile. Tile rules not found.")
+    }
+
+    tileRules.initialResources.forEachProperty((resource, resourceRules) => {
+      const randomAmount = random(this.height) * (resourceRules.max - resourceRules.min)
+      const initialAmount = resourceRules.min + randomAmount
+      this.increaseResource(resource, initialAmount)
+    })
   }
 
   tick(delta) {
@@ -36,14 +54,18 @@ class Tile {
 
     // Try to consume resources for each development
     this.developments.forEachProperty((ninth, development) => {
-      if(development.consumption) {
+      if (development.consumption) {
         development.consumption.forEachProperty((resourceKey, consumptionAmount) => {
-          resourceTargetConsumption[resourceKey] = resourceTargetConsumption[resourceKey] ?
-            resourceTargetConsumption[resourceKey] + consumptionAmount : consumptionAmount
+          resourceTargetConsumption[resourceKey] = resourceTargetConsumption[resourceKey]
+            ? resourceTargetConsumption[resourceKey] + consumptionAmount
+            : consumptionAmount
+
+          // TODO: Consume less if there is less available
 
           const actualConsumptionAmount = this.decreaseResource(resourceKey, consumptionAmount)
-          resourceActualConsumption[resourceKey] = resourceActualConsumption[resourceKey] ?
-          resourceActualConsumption[resourceKey] + actualConsumptionAmount : actualConsumptionAmount
+          resourceActualConsumption[resourceKey] = resourceActualConsumption[resourceKey]
+            ? resourceActualConsumption[resourceKey] + actualConsumptionAmount
+            : actualConsumptionAmount
         })
       }
     })
@@ -71,29 +93,33 @@ class Tile {
     const resourceProduction = {}
 
     this.developments.forEachProperty((ninth, development) => {
-      if(development.production) {
-        if(development.consumption) {
+      if (development.production) {
+        let minimumFactor = 1.0
+        if (development.consumption) {
           // Calculate production depending on consumption factor
-          // TODO: Calculate how the factor impacts production
-
-          let minimumFactor = 1.0
           development.consumption.forEachProperty((resourceKey, consumptionAmount) => {
             if (resourceConsumptionFactor[resourceKey] < minimumFactor) {
               minimumFactor = resourceConsumptionFactor[resourceKey]
             }
           })
+        }
 
-          // TODO: Add production to tiles
-
-        } else {
-          // Produce regardless of factors, since cunsumption is not nessesary
+        if (minimumFactor > 0) {
           development.production.forEachProperty((resourceKey, productionAmount) => {
-            resourceProduction[resourceKey] = resourceProduction[resourceKey] ? resourceProduction[resourceKey] + productionAmount : productionAmount
+            const adjustedProductionAmount = productionAmount * minimumFactor
+            resourceProduction[resourceKey] = resourceProduction[resourceKey]
+              ? resourceProduction[resourceKey] + adjustedProductionAmount
+              : adjustedProductionAmount
           })
-
-          // TODO: Drop this out of else, since it is the same potentially?
         }
       }
+    })
+
+    // Apply produced resources to tile
+    resourceProduction.forEachProperty((resourceKey, productionAmount) => {
+      this.resources[resourceKey] = this.resources[resourceKey]
+        ? this.resources[resourceKey] + productionAmount
+        : productionAmount
     })
   }
 
@@ -136,7 +162,7 @@ class Tile {
     const developmentData = {}
     this.developments.forEachProperty((ninth, development) => {
       developmentData[ninth] = {
-        id: development.id
+        id: development.id,
       }
     })
     return developmentData

@@ -2,6 +2,8 @@ import config from './config/config-__BUILD_ENV__'
 export { config }
 import './utils'
 import { debug } from './utils'
+import store from './config/store.json'
+import rules from './config/rules.json'
 import UserInterface from './ui/UserInterface'
 import WebSocketServer from './networking/WebSocketServer'
 import World from './core/World'
@@ -43,6 +45,8 @@ import * as MessageBuilder from './messaging/messageBuilder'
 export const serverState = {
   tickNumber: 0
 }
+serverState.store = store
+serverState.rules = rules
 
 const userInterface = new UserInterface()
 serverState.userInterface = userInterface
@@ -65,27 +69,11 @@ serverState.world = world
 const situation = new Situation()
 serverState.situation = situation
 
-const store = {
-  developments: {
-    mill: {
-      id: "mill",
-      name: "Mill",
-      consumption: {
-        wood: 2,
-      },
-      production: {
-        goods: 0.2
-      }
-    }
-  }
-}
-serverState.store = store
-
 situation.addNation('Valcom')
 situation.addNation('Narnia')
 
 world.getTile(7, 4).developments["ne"] = store.developments['mill']
-world.getTile(7, 4).increaseResource('wood', 40)
+world.getTile(7, 4).increaseResource('wood', 36000)
 
 // TODO: Client user interface enhancements -> Show resources
 // TODO: Think about how to break apart logic (tiles are king!)

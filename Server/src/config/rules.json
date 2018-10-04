@@ -1,0 +1,54 @@
+{
+  "tiles": {
+    "types": {
+      "0": {
+        "id": "water",
+        "initialResources": {
+          "food": {
+            "min": 30000,
+            "max": 100000
+          }
+        }
+      },
+      "1": {
+        "id": "field",
+        "initialResources": {
+          "food": {
+            "min": 4000,
+            "max": 20000
+          },
+          "woodReserve": {
+            "min": 1000,
+            "max": 10000
+          }
+        }
+      },
+      "2": {
+        "id": "forest",
+        "initialResources": {
+          "food": {
+            "min": 8000,
+            "max": 40000
+          },
+          "woodReserve": {
+            "min": 20000,
+            "max": 80000
+          }
+        }
+      },
+      "3": {
+        "id": "mountain",
+        "initialResources": {
+          "food": {
+            "min": 1000,
+            "max": 4000
+          },
+          "woodReserve": {
+            "min": 200,
+            "max": 5000
+          }
+        }
+      }
+    }
+  }
+}
