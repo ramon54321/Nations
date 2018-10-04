@@ -31,6 +31,11 @@ function initAssets() {
     },
     developments: {
       mill: document.getElementById('source-developments-mill'),
+      wheatFarm: document.getElementById('source-developments-wheatFarm'),
+      loggingOutpost: document.getElementById('source-developments-loggingOutpost'),
+      goldMine: document.getElementById('source-developments-goldMine'),
+      ironMine: document.getElementById('source-developments-ironMine'),
+      lumberYard: document.getElementById('source-developments-lumberYard'),
     },
   }
 }

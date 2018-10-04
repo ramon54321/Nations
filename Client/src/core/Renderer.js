@@ -301,17 +301,11 @@ export default class Renderer {
   }
 
   drawHoverOutline() {
-    // TODO: Use this.mouseTile values instead
     if (document.mouse) {
-      const hoverTilePosition = getTilePositionFromPixel(
-        this.xOffset + document.mouse.mouseX,
-        this.yOffset + document.mouse.mouseY,
-        this.tileSize,
-      )
       this.ctx.beginPath()
       this.ctx.rect(
-        hoverTilePosition[0] * this.tileSize - this.xOffset,
-        hoverTilePosition[1] * this.tileSize - this.yOffset,
+        this.mouseTileX * this.tileSize - this.xOffset,
+        this.mouseTileY * this.tileSize - this.yOffset,
         this.tileSize,
         this.tileSize,
       )
