@@ -2,7 +2,7 @@ import React from 'react'
 import Header from './Header'
 
 import { observer } from 'mobx-react'
-import { forEachProperty, mapProperty } from '../../core/utils'
+import { formatNumber, mapProperty } from '../../core/utils'
 
 function getTile() {
   const x = document.renderer.mouseTileX
@@ -21,7 +21,7 @@ const Panel = observer(
 
       const tile = getTile()
       const developments = tile && mapProperty(tile.developments, (ninth, development) => <li>{development.id}</li>)
-      const resources = tile && mapProperty(tile.resources, (resource, amount) => <li>{resource}: {amount}</li>)
+      const resources = tile && mapProperty(tile.resources, (resource, amount) => <li>{resource}: {formatNumber(amount)}</li>)
 
       return (
         <div className="panel">

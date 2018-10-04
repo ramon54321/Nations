@@ -61,6 +61,10 @@ export function iterateScreenTiles(options, callback) {
   }
 }
 
+export function formatNumber(number, decimalPlaces = 0) {
+  return number.toFixed(decimalPlaces).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export const ninthPosition = {
   nw: [0, 0],
   n: [1, 0],
