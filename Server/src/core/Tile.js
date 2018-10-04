@@ -60,8 +60,6 @@ class Tile {
             ? resourceTargetConsumption[resourceKey] + consumptionAmount
             : consumptionAmount
 
-          // TODO: Consume less if there is less available
-
           const actualConsumptionAmount = this.decreaseResource(resourceKey, consumptionAmount)
           resourceActualConsumption[resourceKey] = resourceActualConsumption[resourceKey]
             ? resourceActualConsumption[resourceKey] + actualConsumptionAmount
@@ -122,6 +120,8 @@ class Tile {
         : productionAmount
     })
   }
+
+  // TODO: Add add and remove development functions
 
   /**
    * Tries to decrease resources and returns the actual amount decreased. This may

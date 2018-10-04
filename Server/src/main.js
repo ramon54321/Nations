@@ -72,8 +72,7 @@ serverState.situation = situation
 situation.addNation('Valcom')
 situation.addNation('Narnia')
 
-world.getTile(7, 4).developments["ne"] = store.developments['mill']
-world.getTile(7, 4).increaseResource('wood', 36000)
+world.getTile(7, 4).developments["ne"] = store.developments['loggingOutpost']
 
 // TODO: Client user interface enhancements -> Show resources
 // TODO: Think about how to break apart logic (tiles are king!)

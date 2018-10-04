@@ -12,9 +12,9 @@ Level 2 - Produced (Produced from Level 1)
   food
 
                          ->         wheat (Wheat Farm)
-  woodReserve           ->         wood (Logging Outpost)
-  goldReserve           ->         gold (Gold Mine)
-  ironReserve           ->         iron (Iron Mine)
+  woodReserve            ->         wood (Logging Outpost)
+  goldReserve            ->         gold (Gold Mine)
+  ironReserve            ->         iron (Iron Mine)
 
   wood                   ->         lumber (Lumber Yard)
 

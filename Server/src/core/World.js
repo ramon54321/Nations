@@ -28,8 +28,10 @@ class World {
   }
 
   getTilesFlat() {
-    // TODO: Possible optimization by storing flat() in var since its references
-    return this.tiles.flat()
+    if (!this.tilesFlat) {
+      this.tilesFlat = this.tiles.flat()
+    }
+    return this.tilesFlat
   }
 
   getTilesData() {
