@@ -1,25 +1,37 @@
+// .panel {
+//   position: absolute;
+//   color: $color-dark;
+//   width: $panel-width;
+
+//   // background: linear-gradient(to right, $color-primary 0%, transparentize($color-primary, 1.0) 100%);
+
+//   li {
+//     height: 50px;
+//     line-height: 46px;
+//     color: $color-white;
+//     margin-top: 0px;
+//     margin-bottom: 0px;
+//     // background-color: $color-primary;
+//     padding-left: 2em;
+//     transition-duration: 0.5s;
+
+//     &:hover {
+//       background-color: $color-primary-light;
+//       padding-left: 4em;
+//     }
+//   }
+// }
+
 .panel {
   position: absolute;
-  color: $color-dark;
-  width: $panel-width;
+  top: 0;
+  right: 0;
+  margin: 20px;
+  padding: 20px;
 
-  // background: linear-gradient(to right, $color-primary 0%, transparentize($color-primary, 1.0) 100%);
-
-  li {
-    height: 50px;
-    line-height: 46px;
-    color: $color-white;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    // background-color: $color-primary;
-    padding-left: 2em;
-    transition-duration: 0.5s;
-
-    &:hover {
-      background-color: $color-primary-light;
-      padding-left: 4em;
-    }
-  }
+  background-color: $color-cta-normal;
+  border: solid $size-border $color-cta-border;
+  color: $color-white;
 }
 
 .dock {

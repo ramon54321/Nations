@@ -108,7 +108,7 @@ export default class Renderer {
 
   updateKeys() {
     if (document.keys[32]) {
-      document.uiState.clearSelectedTile()
+      document.uiState.resetMenus()
       document.keys[32] = false
     }
   }

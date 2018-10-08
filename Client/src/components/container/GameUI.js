@@ -10,8 +10,10 @@ class _GameUI extends React.Component {
 
   render() {
     const dockItems = document.uiState.getDockItems()
+    const mainPanel = document.uiState.getMainPanel()
     return (
       <React.Fragment>
+        {mainPanel}
         <Dock items={dockItems} />
       </React.Fragment>
     )

@@ -4,11 +4,10 @@ import Renderer from './Renderer'
 
 import ReactDOM from 'react-dom'
 import React from 'react'
-import Panel from '../components/presentational/Panel'
-import GameState from './GameState';
-import GameUI from '../components/container/GameUI';
-import { observable } from 'mobx';
-import UIState from './UIState';
+import GameState from './GameState'
+import GameUI from '../components/container/GameUI'
+import { observable } from 'mobx'
+import UIState from './UIState'
 
 window.onload = function() {
   initConfig()
