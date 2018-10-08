@@ -8,32 +8,8 @@ class _GameUI extends React.Component {
     super(props)
   }
 
-  getDockItems() {
-    let dockItems
-    if (document.uiState.selectedTile) {
-      dockItems = [
-        {
-          icon: 'fab fa-houzz',
-          name: 'Developments',
-        },
-      ]
-    } else {
-      dockItems = [
-        {
-          icon: 'fab fa-houzz',
-          name: 'Developments',
-        },
-        {
-          icon: 'fas fa-cog',
-          name: 'Settings',
-        },
-      ]
-    }
-    return dockItems
-  }
-
   render() {
-    const dockItems = this.getDockItems()
+    const dockItems = document.uiState.getDockItems()
     return (
       <React.Fragment>
         <Dock items={dockItems} />

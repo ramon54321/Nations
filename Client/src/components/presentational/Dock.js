@@ -9,7 +9,7 @@ class _Dock extends React.Component {
   }
   render() {
     const dockItems = this.props.items.map(item => {
-      return <DockItem icon={item.icon} name={item.name} />
+      return <DockItem icon={item.icon} name={item.name} onClick={item.onClick} />
     })
     return <div className="dock">{dockItems}</div>
   }

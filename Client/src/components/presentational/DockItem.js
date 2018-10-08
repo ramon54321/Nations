@@ -9,7 +9,7 @@ class _DockItem extends React.Component {
   }
   render() {
     return (
-      <div className="dock_item interactive" onClick={() => (document.uiState.text = 'hello')}>
+      <div className="dock_item interactive" onClick={this.props.onClick}>
         <Icon icon={this.props.icon} />
       </div>
     )
