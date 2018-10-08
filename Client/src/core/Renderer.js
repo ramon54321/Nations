@@ -1,5 +1,12 @@
 import { document, config } from './main'
-import { iterateScreenTiles, getTileIcon, getTilePositionFromPixel, ninthPosition, forEachProperty, roundedPoly } from './utils'
+import {
+  iterateScreenTiles,
+  getTileIcon,
+  getTilePositionFromPixel,
+  ninthPosition,
+  forEachProperty,
+  roundedPoly,
+} from './utils'
 import { observable, decorate } from 'mobx'
 
 export default class Renderer {
@@ -21,8 +28,6 @@ export default class Renderer {
 
   onInitialGameState() {
     console.log('Initial gameState received!')
-
-    // console.log(document.gameState)
 
     // Set middle of map
     this.xOffset = (this.tileSize * document.gameState.state.size) / 2 - this.width / 2
@@ -67,6 +72,10 @@ export default class Renderer {
       document.mouse.mouseX = mousePosition.x
       document.mouse.mouseY = mousePosition.y
     })
+
+    this.canvas.addEventListener('click', event => {
+      document.uiState.setSelectedTile(this.mouseTileX, this.mouseTileY)
+    })
   }
 
   initFPSCounter() {
@@ -95,6 +104,13 @@ export default class Renderer {
 
   toggleIcons() {
     this.isShowIcons = !this.isShowIcons
+  }
+
+  updateKeys() {
+    if (document.keys[32]) {
+      document.uiState.clearSelectedTile()
+      document.keys[32] = false
+    }
   }
 
   updateCamera(delta) {
@@ -281,7 +297,7 @@ export default class Renderer {
     this.ctx.globalAlpha = speedFade
     iterateScreenTiles(this.screenSpace, (x, y, tile) => {
       if (tile.developments) {
-        forEachProperty(tile.developments, ((ninth, development) => {
+        forEachProperty(tile.developments, (ninth, development) => {
           const image = document.assets.developments[development.id]
           if (image) {
             this.ctx.drawImage(
@@ -292,10 +308,8 @@ export default class Renderer {
               this.iconSizeDevelopment,
             )
           }
-        }))
+        })
       }
-
-      
     })
     this.ctx.globalAlpha = 1.0
   }
@@ -330,6 +344,7 @@ export default class Renderer {
     }
 
     // Client logic updates
+    this.updateKeys()
     this.updateCamera(delta)
     this.updateMouse()
     this.updateScreenSpace()

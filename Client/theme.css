@@ -17,8 +17,42 @@
     padding-left: 2em;
     transition-duration: 0.5s; }
     .nations .panel li:hover {
-      background-color: #44a7e9;
+      background-color: #848683;
       padding-left: 4em; }
+
+.nations .dock {
+  pointer-events: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  display: flex;
+  justify-content: center; }
+  .nations .dock_item {
+    pointer-events: all;
+    height: 60px;
+    width: 60px;
+    margin-left: 4px;
+    margin-right: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+
+.nations .interactive {
+  cursor: default;
+  background-color: rgba(99, 104, 96, 0.85);
+  border: solid 1px rgba(252, 252, 252, 0.85);
+  color: #fcfcfc; }
+  .nations .interactive:hover {
+    background-color: rgba(132, 134, 131, 0.85); }
+
+.nations .icon {
+  color: #fcfcfc; }
+
+.nations img {
+  background: none; }
 
 .nations canvas {
   display: inline-block;

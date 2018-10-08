@@ -2,12 +2,22 @@
 $color-white: rgb(252, 252, 252);
 $color-black: rgb(20, 20, 20);
 
-$color-light: rgb(214, 214, 214);
+$color-light: rgb(238, 238, 238);
 $color-dark: rgb(48, 48, 48);
 
-$color-primary: rgb(60, 136, 187);
-$color-primary-light: rgb(68, 167, 233);
-$color-primary-dark: rgb(29, 97, 143);
+$color-icon-light: $color-white;
+$color-icon-dark: $color-dark;
+
+$color-primary: rgb(99, 104, 96);
+$color-primary-light: rgb(132, 134, 131);
+$color-primary-dark: rgb(77, 80, 75);
+
+$color-cta-normal: rgba($color-primary, 0.85);
+$color-cta-hover: rgba($color-primary-light, 0.85);
+$color-cta-border: rgba($color-white, 0.85);
+
+// Sizes
+$size-border: 1px;
 
 // Panels
 $panel-width: 340px;

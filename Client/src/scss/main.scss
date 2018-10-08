@@ -22,6 +22,48 @@
   }
 }
 
+.dock {
+  pointer-events: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+
+  &_item {
+    pointer-events: all;
+    height: 60px;
+    width: 60px;
+    margin-left: 4px;
+    margin-right: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.interactive {
+  cursor: default;
+  background-color: $color-cta-normal;
+  border: solid $size-border $color-cta-border;
+  color: $color-white;
+
+  &:hover {
+    background-color: $color-cta-hover
+  }
+}
+
+.icon {
+  color: $color-icon-light;
+}
+
+img {
+  background: none;
+}
+
 canvas {
   display: inline-block;
   position: absolute;
