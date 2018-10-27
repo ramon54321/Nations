@@ -12,8 +12,11 @@ class UIState {
   }
 
   resetMenus() {
-    this.selectedTile = undefined
-    this.chosenPanel = undefined
+    if (this.chosenPanel) {
+      this.chosenPanel = undefined
+    } else {
+      this.selectedTile = undefined
+    }
   }
 
   getMainPanel() {
@@ -30,6 +33,8 @@ class UIState {
       switch(this.chosenPanel) {
         case 'tasks':
           return (<Panel>Tasks</Panel>)
+        case 'nation':
+          return (<Panel>Nation</Panel>)
         case 'settings':
           return (<Panel>Settings</Panel>)
         default:
@@ -70,6 +75,13 @@ class UIState {
           name: 'Tasks',
           onClick: () => {
             this.chosenPanel = 'tasks'
+          },
+        },
+        {
+          icon: 'fas fa-landmark',
+          name: 'Nation',
+          onClick: () => {
+            this.chosenPanel = 'nation'
           },
         },
         {

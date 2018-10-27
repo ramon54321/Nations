@@ -8,6 +8,7 @@ import GameState from './GameState'
 import GameUI from '../components/container/GameUI'
 import { observable } from 'mobx'
 import UIState from './UIState'
+import ClientState from './ClientState';
 
 window.onload = function() {
   initConfig()
@@ -76,14 +77,20 @@ function initWebSocketConnection() {
       if (!document.gameState) {
         document.gameState = new GameState(message.data)
         document.renderer.onInitialGameState()
+        initClientState()
         initUserInterface()
       } else {
         document.gameState.updateState(message.data)
+        // console.log(message.data)
       }
     }
   }
 
   document.send = data => connection.send(data)
+}
+
+function initClientState() {
+  document.clientState = new ClientState()
 }
 
 function initUserInterface() {

@@ -107,6 +107,7 @@ export default class Renderer {
   }
 
   updateKeys() {
+    // Space
     if (document.keys[32]) {
       document.uiState.resetMenus()
       document.keys[32] = false
