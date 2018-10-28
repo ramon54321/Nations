@@ -1,5 +1,6 @@
 import React from 'react'
 import Panel from '../components/presentational/Panel'
+import PanelNation from '../components/highlevel/PanelNation'
 import { decorate, observable } from 'mobx'
 
 class UIState {
@@ -34,7 +35,7 @@ class UIState {
         case 'tasks':
           return (<Panel>Tasks</Panel>)
         case 'nation':
-          return (<Panel>Nation</Panel>)
+          return (<Panel><PanelNation /></Panel>)
         case 'settings':
           return (<Panel>Settings</Panel>)
         default:

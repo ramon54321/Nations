@@ -5,3 +5,16 @@ ul {
 li {
   list-style: none;
 }
+
+table {
+  tr {
+    background-color: transparent;
+    border-top: none;
+  }
+  tr:nth-child(2n) {
+    background-color: transparent;
+  }
+  td {
+    border: none;
+  }
+}

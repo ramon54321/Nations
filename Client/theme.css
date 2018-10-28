@@ -4,6 +4,16 @@
 .nations li {
   list-style: none; }
 
+.nations table tr {
+  background-color: transparent;
+  border-top: none; }
+
+.nations table tr:nth-child(2n) {
+  background-color: transparent; }
+
+.nations table td {
+  border: none; }
+
 .nations .panel {
   position: absolute;
   top: 0;

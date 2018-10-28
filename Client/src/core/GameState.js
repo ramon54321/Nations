@@ -1,4 +1,5 @@
 import { decorate, observable, computed } from 'mobx'
+import { forEachProperty } from './utils'
 
 class GameState {
   constructor(initialState) {
@@ -15,7 +16,6 @@ class GameState {
   }
 
   getNations() {
-    console.log(this.pureState)
     return this.state.nations
   }
 
@@ -25,6 +25,17 @@ class GameState {
       tiles.push(this.getTile(tile[0], tile[1]))
     })
     return tiles
+  }
+
+  getNationDevelopments(nationName) {
+    const developments = []
+    const tiles = this.getNationTiles(nationName)
+    tiles.forEach(tile => {
+      forEachProperty(tile.developments, property => {
+        developments.push(property)
+      })
+    })
+    return developments
   }
 }
 decorate(GameState, {
